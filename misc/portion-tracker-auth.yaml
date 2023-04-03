@@ -26,6 +26,9 @@ Resources:
               KeyType: HASH
             - AttributeName: GSI1SK
               KeyType: RANGE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
       TimeToLiveSpecification:
         AttributeName: expires
         Enabled: true

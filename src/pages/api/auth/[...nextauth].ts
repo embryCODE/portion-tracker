@@ -33,6 +33,6 @@ export const authOptions = {
       from: process.env.EMAIL_FROM,
     }),
   ],
-  adapter: DynamoDBAdapter(client, { tableName: 'portion-tracker-auth' }),
+  adapter: DynamoDBAdapter(client),
 }
 export default NextAuth(authOptions)
