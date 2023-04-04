@@ -7,7 +7,6 @@ frontend:
     build:
       commands:
         - npm run build
-        - env | grep -e NEXT_PUBLIC_ >> .env.production
         - env | grep -e NEXTAUTH_ >> .env.production
         - env | grep -e EMAIL_SERVER_ >> .env.production
         - env | grep -e EMAIL_FROM >> .env.production
