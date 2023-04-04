@@ -7,16 +7,11 @@ frontend:
     build:
       commands:
         - npm run build
-        - echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
-        - echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> .env
-        - echo "EMAIL_SERVER_USER=$EMAIL_SERVER_USER" >> .env
-        - echo "EMAIL_SERVER_PASSWORD=$EMAIL_SERVER_PASSWORD" >> .env
-        - echo "EMAIL_SERVER_HOST=$EMAIL_SERVER_HOST" >> .env
-        - echo "EMAIL_SERVER_PORT=$EMAIL_SERVER_PORT" >> .env
-        - echo "EMAIL_FROM=$EMAIL_FROM" >> .env
-        - echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> .env
-        - echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
-        - echo "DATABASE_URL=$DATABASE_URL" >> .env
+        - env | grep -e NEXT_PUBLIC_ >> .env.production
+        - env | grep -e NEXTAUTH_ >> .env.production
+        - env | grep -e EMAIL_SERVER_ >> .env.production
+        - env | grep -e EMAIL_FROM >> .env.production
+        - env | grep -e DATABASE_URL >> .env.production
   artifacts:
     baseDirectory: .next
     files:
