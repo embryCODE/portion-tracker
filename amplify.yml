@@ -1,0 +1,26 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+        - echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
+        - echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> .env
+        - echo "EMAIL_SERVER_USER=$EMAIL_SERVER_USER" >> .env
+        - echo "EMAIL_SERVER_PASSWORD=$EMAIL_SERVER_PASSWORD" >> .env
+        - echo "EMAIL_SERVER_HOST=$EMAIL_SERVER_HOST" >> .env
+        - echo "EMAIL_SERVER_PORT=$EMAIL_SERVER_PORT" >> .env
+        - echo "EMAIL_FROM=$EMAIL_FROM" >> .env
+        - echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> .env
+        - echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
+        - echo "DATABASE_URL=$DATABASE_URL" >> .env
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
