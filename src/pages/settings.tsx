@@ -13,6 +13,9 @@ export default function Settings() {
       .then((user) => {
         setMe(user)
       })
+      .catch((e) => {
+        console.error(e)
+      })
       .finally(() => {
         setLoading(false)
       })
