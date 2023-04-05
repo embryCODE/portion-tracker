@@ -14,4 +14,12 @@ export class TestUserRepo implements UserRepo {
       return Promise.resolve(null)
     }
   }
+
+  public updateUserName = (id: string, name: string) => {
+    if (id === '123') {
+      return Promise.resolve({ ...testUser, name })
+    } else {
+      return Promise.resolve(null)
+    }
+  }
 }

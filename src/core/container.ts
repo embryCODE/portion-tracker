@@ -12,10 +12,12 @@ export class Container {
     const userUseCases = new UserUseCases(userRepo)
 
     this.getUserById = userUseCases.getUserById
+    this.updateUserName = userUseCases.updateUserName
   }
 
   // These public methods are all the use cases for the app
   public getUserById
+  public updateUserName
 }
 
 export const container = new Container({ userRepo: new PrismaUserRepo() })

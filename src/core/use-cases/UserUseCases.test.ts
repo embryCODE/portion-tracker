@@ -12,20 +12,36 @@ describe('UserUseCases', () => {
     testUserRepo = new TestUserRepo()
   })
 
-  it('should construct a UserUseCases object', () => {
-    const userUseCases = new UserUseCases(testUserRepo)
-    expect(userUseCases).toBeInstanceOf(UserUseCases)
+  describe('getUserById', () => {
+    it('should construct a UserUseCases object', () => {
+      const userUseCases = new UserUseCases(testUserRepo)
+      expect(userUseCases).toBeInstanceOf(UserUseCases)
+    })
+
+    it('should return a user if found', async () => {
+      const userUseCases = new UserUseCases(testUserRepo)
+      const user = await userUseCases.getUserById('123')
+      expect(user).toEqual(testUser)
+    })
+
+    it('should return null if user not found', async () => {
+      const userUseCases = new UserUseCases(testUserRepo)
+      const user = await userUseCases.getUserById('456')
+      expect(user).toBeNull()
+    })
   })
 
-  it('should return a user if found', async () => {
-    const userUseCases = new UserUseCases(testUserRepo)
-    const user = await userUseCases.getUserById('123')
-    expect(user).toEqual(testUser)
-  })
+  describe('updateUserName', () => {
+    it('should update the user name and return the updated user', async () => {
+      const userUseCases = new UserUseCases(testUserRepo)
+      const user = await userUseCases.updateUserName('123', 'Mr. Furious')
+      expect(user).toEqual({ ...testUser, name: 'Mr. Furious' })
+    })
 
-  it('should return null if user not found', async () => {
-    const userUseCases = new UserUseCases(testUserRepo)
-    const user = await userUseCases.getUserById('456')
-    expect(user).toBeNull()
+    it('should return null if user not found', async () => {
+      const userUseCases = new UserUseCases(testUserRepo)
+      const user = await userUseCases.updateUserName('456', 'Mr. Furious')
+      expect(user).toBeNull()
+    })
   })
 })
