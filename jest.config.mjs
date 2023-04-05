@@ -1,4 +1,5 @@
-// jest.config.mjs
+// noinspection JSFileReferences,JSUnusedGlobalSymbols
+
 import nextJest from 'next/jest.js'
 
 const createJestConfig = nextJest({
