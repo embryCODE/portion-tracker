@@ -1,66 +1,32 @@
-import { PrismaClient } from '@prisma/client'
-import { GetServerSideProps } from 'next'
-import { getToken } from 'next-auth/jwt'
 import { signOut } from 'next-auth/react'
+import { useEffect, useState } from 'react'
 
-const secret = process.env.NEXTAUTH_SECRET
+import { User } from '@/src/core/entities/user'
 
-const prisma = new PrismaClient()
+export default function Settings() {
+  const [me, setMe] = useState<User>()
+  const [isLoading, setLoading] = useState(true)
 
-type DisplayUser = {
-  name: string | null
-  email: string | null
-  image: string | null
-}
+  useEffect(() => {
+    fetch('/api/me')
+      .then((res) => res.json())
+      .then((user) => {
+        setMe(user)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [])
 
-export default function Settings({ user }: { user: DisplayUser }) {
+  if (isLoading) return <p>Loading...</p>
+
+  // We should always have a user due to middleware
+  if (!me) return <p>User not found</p>
+
   return (
     <>
-      Signed in as {JSON.stringify(user, null, 2)} <br />
+      Signed in as {JSON.stringify(me, null, 2)} <br />
       <button onClick={() => signOut()}>Sign out</button>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps<{
-  user: DisplayUser
-}> = async ({ req }) => {
-  const token = await getToken({ req, secret })
-
-  // We will always have a token here, due to middleware, but leaving this
-  // here just in case.
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-
-  const user = await prisma.user.findUnique({
-    where: {
-      id: token.sub,
-    },
-    select: {
-      name: true,
-      email: true,
-      image: true,
-    },
-  })
-
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
-
-  return {
-    props: {
-      user,
-    },
-  }
 }
