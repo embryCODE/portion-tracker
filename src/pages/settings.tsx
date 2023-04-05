@@ -1,6 +1,7 @@
 import { signOut } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 
+import Container from '@/src/components/Container'
 import { User } from '@/src/core/entities/user'
 import { request } from '@/src/core/infra/net'
 
@@ -26,7 +27,7 @@ export default function Settings() {
       })
   }, [])
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     setLoading(true)
@@ -52,26 +53,64 @@ export default function Settings() {
       })
   }
 
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading)
+    return (
+      <Container>
+        <p>Loading...</p>
+      </Container>
+    )
 
   // We should always have a user due to middleware
-  if (!me) return <p>User not found</p>
+  if (!me)
+    return (
+      <Container>
+        <p>User not found</p>
+      </Container>
+    )
 
   return (
-    <>
-      Signed in as {JSON.stringify(me, null, 2)} <br />
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name</label>
+    <Container>
+      <h1 className="tw-text-3xl tw-font-bold tw-mb-6">Settings</h1>
+
+      <p>Signed in as {me.email}</p>
+
+      <button
+        className={
+          'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1'
+        }
+        onClick={() => signOut()}
+      >
+        Sign out
+      </button>
+
+      <form className={'tw-mt-4'} onSubmit={handleSubmit}>
+        <label className={'tw-block'} htmlFor="name">
+          Name
+        </label>
+
         <input
+          className={
+            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
+          }
           type="text"
           name="name"
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          autoFocus
         />
-        <button type="submit">Update</button>
+
+        {name !== me.name && (
+          <button
+            className={
+              'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1'
+            }
+            type="submit"
+          >
+            Update
+          </button>
+        )}
       </form>
-      <button onClick={() => signOut()}>Sign out</button>
-    </>
+    </Container>
   )
 }
