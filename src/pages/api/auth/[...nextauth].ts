@@ -19,11 +19,9 @@ export const authOptions: NextAuthOptions = {
       from: process.env.EMAIL_FROM,
     }),
   ],
-  callbacks: {
-    session({ session, user }) {
-      session.user.id = user.id
-      return session
-    },
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
 }
 export default NextAuth(authOptions)

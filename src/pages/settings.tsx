@@ -1,15 +1,17 @@
 import { PrismaClient } from '@prisma/client'
 import { GetServerSideProps } from 'next'
-import { getServerSession } from 'next-auth'
+import { getToken } from 'next-auth/jwt'
 import { signOut } from 'next-auth/react'
 
-import { authOptions } from '@/src/pages/api/auth/[...nextauth]'
-
-import { User } from '.prisma/client'
+const secret = process.env.NEXTAUTH_SECRET
 
 const prisma = new PrismaClient()
 
-type DisplayUser = Partial<User>
+type DisplayUser = {
+  name: string | null
+  email: string | null
+  image: string | null
+}
 
 export default function Settings({ user }: { user: DisplayUser }) {
   return (
@@ -21,11 +23,13 @@ export default function Settings({ user }: { user: DisplayUser }) {
 }
 
 export const getServerSideProps: GetServerSideProps<{
-  user?: DisplayUser
-}> = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions)
+  user: DisplayUser
+}> = async ({ req }) => {
+  const token = await getToken({ req, secret })
 
-  if (!session) {
+  // We will always have a token here, due to middleware, but leaving this
+  // here just in case.
+  if (!token) {
     return {
       redirect: {
         destination: '/',
@@ -36,10 +40,9 @@ export const getServerSideProps: GetServerSideProps<{
 
   const user = await prisma.user.findUnique({
     where: {
-      id: session.user.id,
+      id: token.sub,
     },
     select: {
-      id: true,
       name: true,
       email: true,
       image: true,
