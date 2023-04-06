@@ -1,17 +1,14 @@
-import { UserRepo } from '@/src/core/entities/user'
+import { PrismaPlanRepo } from '@/src/core/infra/repositories/PrismaPlanRepo'
 import { TestUserRepo } from '@/src/core/infra/repositories/TestUserRepo'
 
 import { Container } from './container'
 
 describe('Container', () => {
-  let testUserRepo: UserRepo
-
-  beforeEach(() => {
-    testUserRepo = new TestUserRepo()
-  })
-
   it('should construct a container object', () => {
-    const container = new Container({ userRepo: testUserRepo })
+    const container = new Container({
+      userRepo: new TestUserRepo(),
+      planRepo: new PrismaPlanRepo(),
+    })
     expect(container).toBeInstanceOf(Container)
   })
 })

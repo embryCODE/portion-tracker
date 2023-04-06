@@ -1,5 +1,5 @@
 import { UserRepo } from '@/src/core/entities/user'
-import { prisma } from '@/src/core/infra/prisma'
+import prisma from '@/src/core/infra/prisma'
 
 export class PrismaUserRepo implements UserRepo {
   getUserById(id: string) {
