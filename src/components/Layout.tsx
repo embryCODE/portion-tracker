@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { ReactNode } from 'react'
 
-import Container from '@/src/components/Container'
-import MyLink from '@/src/components/MyLink'
+import { Footer } from '@/src/components/Footer'
+import { Nav } from '@/src/components/Nav'
 
 interface LayoutProps {
   children: ReactNode
@@ -19,41 +19,9 @@ export default function Layout({ children }: LayoutProps) {
       </Head>
 
       <div className={'tw-absolute tw-inset-0 tw-h-full tw-flex tw-flex-col'}>
-        <nav>
-          <div className="tw-border-solid tw-border-b-2 tw-border-protein">
-            <Container>
-              <ul className={'tw-flex tw-space-x-4'}>
-                <li>
-                  <MyLink href="/" activeClassName={'tw-font-bold'}>
-                    Welcome
-                  </MyLink>
-                </li>
-
-                <li>
-                  <MyLink href="/tracker" activeClassName={'tw-font-bold'}>
-                    Tracker
-                  </MyLink>
-                </li>
-
-                <li>
-                  <MyLink href="/settings" activeClassName={'tw-font-bold'}>
-                    Settings
-                  </MyLink>
-                </li>
-              </ul>
-            </Container>
-          </div>
-        </nav>
-
+        <Nav />
         <main className={'tw-flex-1'}>{children}</main>
-
-        <footer>
-          <div className="tw-border-solid tw-border-t-2 tw-border-protein">
-            <Container>
-              <div className="tw-flex tw-justify-between">Footer</div>
-            </Container>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   )
