@@ -43,6 +43,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  days          Day[]
+  plans         Plan[]
 }
 
 model VerificationToken {
@@ -51,4 +53,36 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Plan {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String?
+  description String?
+  protein     Float
+  vegetables  Float
+  carbs       Float
+  fat         Float
+  meals       Int
+  author      User    @relation(fields: [authorId], references: [id])
+  authorId    String
+  days        Day[]
+}
+
+model Day {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  notes       String?
+  date        DateTime
+  protein     Float
+  vegetables  Float
+  carbs       Float
+  fat         Float
+  author      User    @relation(fields: [authorId], references: [id])
+  authorId    String
+  plan        Plan    @relation(fields: [planId], references: [id])
+  planId      String
 }
