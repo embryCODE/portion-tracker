@@ -35,9 +35,25 @@ export default function usePlans() {
     [getPlans]
   )
 
+  const deletePlan = useCallback(
+    async (plan: Plan) => {
+      setIsLoading(true)
+
+      await request('/api/plans', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(plan),
+      })
+
+      void getPlans()
+    },
+    [getPlans]
+  )
+
   return {
     plans,
     createOrUpdatePlan,
     isLoading,
+    deletePlan,
   }
 }

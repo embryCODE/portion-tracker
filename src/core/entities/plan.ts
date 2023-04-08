@@ -15,6 +15,7 @@ export interface PlanRepo {
   getAllPlansByUserId(userId: string): Promise<Result<Plan[]>>
   getPlanById(id: string): Promise<Result<Plan | null>>
   createOrUpdatePlan(userId: string, plan: Plan): Promise<Result<Plan | null>>
+  deletePlan(id: string): Promise<Result>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,8 +24,8 @@ export function validatePlan(plan: any): Result<Plan> {
     typeof plan !== 'object' ||
     plan === null ||
     !plan.id ||
-    !plan.name ||
-    !plan.description ||
+    typeof plan.name !== 'string' ||
+    typeof plan.description !== 'string' ||
     typeof plan.protein !== 'number' ||
     typeof plan.vegetables !== 'number' ||
     typeof plan.carbs !== 'number' ||

@@ -21,6 +21,7 @@ export class Container {
     this.getAllPlansByUserId = planUseCases.getAllPlansByUserId
     this.getPlanById = planUseCases.getPlanById
     this.createOrUpdatePlan = planUseCases.createOrUpdatePlan
+    this.deletePlan = planUseCases.deletePlan
   }
 
   // These public methods are all the use cases for the app
@@ -29,6 +30,7 @@ export class Container {
   public getAllPlansByUserId
   public getPlanById
   public createOrUpdatePlan
+  public deletePlan
 }
 
 export const container = new Container({

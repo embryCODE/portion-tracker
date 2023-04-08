@@ -6,14 +6,21 @@ import { testPlan } from '@/src/core/infra/repositories/TestPlanRepo'
 
 describe('PlanForm', () => {
   const handleSubmit = jest.fn()
+  const handleDelete = jest.fn()
 
   beforeEach(() => {
     handleSubmit.mockClear()
+    handleDelete.mockClear()
   })
 
   it('should render', () => {
     const { getByLabelText } = render(
-      <PlanForm plan={testPlan} onSubmit={handleSubmit} />
+      <PlanForm
+        plan={testPlan}
+        onSubmit={handleSubmit}
+        isLoading={false}
+        onDelete={handleDelete}
+      />
     )
     expect(getByLabelText('Name'))
   })
@@ -21,7 +28,14 @@ describe('PlanForm', () => {
   it('should update the name when typing', async () => {
     const user = userEvent.setup()
 
-    render(<PlanForm plan={testPlan} onSubmit={handleSubmit} />)
+    render(
+      <PlanForm
+        plan={testPlan}
+        onSubmit={handleSubmit}
+        isLoading={false}
+        onDelete={handleDelete}
+      />
+    )
 
     const input = screen.getByLabelText<HTMLInputElement>('Name')
     expect(input.value).toBe('Test Plan')
@@ -35,7 +49,14 @@ describe('PlanForm', () => {
   it('should call onSubmit on submit', async () => {
     const user = userEvent.setup()
 
-    render(<PlanForm plan={testPlan} onSubmit={handleSubmit} />)
+    render(
+      <PlanForm
+        plan={testPlan}
+        onSubmit={handleSubmit}
+        isLoading={false}
+        onDelete={handleDelete}
+      />
+    )
 
     const input = screen.getByLabelText<HTMLInputElement>('Name')
 

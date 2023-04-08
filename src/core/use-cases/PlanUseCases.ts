@@ -5,9 +5,11 @@ export class PlanUseCases {
     this.getAllPlansByUserId = planRepo.getAllPlansByUserId
     this.getPlanById = planRepo.getPlanById
     this.createOrUpdatePlan = planRepo.createOrUpdatePlan
+    this.deletePlan = planRepo.deletePlan
   }
 
   public getAllPlansByUserId
   public getPlanById
   public createOrUpdatePlan
+  public deletePlan
 }

@@ -42,4 +42,19 @@ export class TestPlanRepo implements PlanRepo {
       return Promise.resolve({ ok: true as const, value: plan })
     }
   }
+
+  public deletePlan = (id: string) => {
+    const foundPlan = plans.find((plan) => plan.id === id)
+
+    if (foundPlan) {
+      const index = plans.indexOf(foundPlan)
+      plans.splice(index, 1)
+      return Promise.resolve({ ok: true as const, value: true as never })
+    } else {
+      return Promise.resolve({
+        ok: false as const,
+        error: new Error('Plan not found'),
+      })
+    }
+  }
 }

@@ -49,6 +49,18 @@ export default async function handler(
       return
     }
 
+    if (req.method === 'DELETE') {
+      const plans = await container.deletePlan(req.body.id)
+
+      if (!plans.ok) {
+        res.status(400).json(plans.error.message)
+        return
+      }
+
+      res.status(204).end()
+      return
+    }
+
     res.status(405).end()
   } catch (e) {
     console.error(e)
