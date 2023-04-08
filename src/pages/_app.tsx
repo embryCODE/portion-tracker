@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app'
 import type { Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 
-import Layout from '@/src/components/Layout'
+import Layout from '@/src/components/layout/Layout'
 import { AuthProvider } from '@/src/hooks/AuthProvider'
 
 export default function App({

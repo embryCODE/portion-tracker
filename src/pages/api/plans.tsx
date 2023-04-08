@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
 
 import { container } from '@/src/core/container'
-import { validateUserName } from '@/src/core/entities/user'
+import { validatePlan } from '@/src/core/entities/plan'
 
 const secret = process.env.NEXTAUTH_SECRET
 
@@ -19,36 +19,33 @@ export default async function handler(
 
   try {
     if (req.method === 'GET') {
-      const user = await container.getUserById(token.sub)
+      const plans = await container.getAllPlansByUserId(token.sub)
 
-      if (!user.ok) {
-        res.status(400).json(user.error.message)
+      if (!plans.ok) {
+        res.status(400).json(plans.error.message)
         return
       }
 
-      res.json(user.value)
+      res.json(plans.value)
       return
     }
 
-    if (req.method === 'PUT') {
-      const validatedUserName = validateUserName(req.body.name)
+    if (req.method === 'POST') {
+      const validatedPlan = validatePlan(req.body)
 
-      if (!validatedUserName.ok) {
-        res.status(400).json(validatedUserName.error.message)
+      if (!validatedPlan.ok) {
+        res.status(400).json(validatedPlan.error.message)
         return
       }
 
-      const user = await container.updateUserName(
-        token.sub,
-        validatedUserName.value
-      )
+      const plans = await container.createOrUpdatePlan(token.sub, req.body)
 
-      if (!user.ok) {
-        res.status(400).json(user.error.message)
+      if (!plans.ok) {
+        res.status(400).json(plans.error.message)
         return
       }
 
-      res.json(user.value)
+      res.json(plans.value)
       return
     }
 

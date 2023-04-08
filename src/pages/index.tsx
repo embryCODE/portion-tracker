@@ -1,5 +1,5 @@
-import Container from '@/src/components/Container'
-import MyLink from '@/src/components/MyLink'
+import Container from '@/src/components/layout/Container'
+import MyLink from '@/src/components/shared/MyLink'
 import { useAuth } from '@/src/hooks/AuthProvider'
 
 export default function Welcome() {

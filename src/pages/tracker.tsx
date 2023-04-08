@@ -1,4 +1,4 @@
-import Container from '@/src/components/Container'
+import Container from '@/src/components/layout/Container'
 
 export default function Tracker() {
   return (

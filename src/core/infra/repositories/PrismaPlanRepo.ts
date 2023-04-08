@@ -4,10 +4,10 @@ import prisma from '@/src/core/infra/prisma'
 import { Plan } from '.prisma/client'
 
 export class PrismaPlanRepo implements PlanRepo {
-  async getAllPlansByUserId(id: string) {
+  async getAllPlansByUserId(userId: string) {
     const plans = await prisma.plan.findMany({
       where: {
-        id,
+        authorId: userId,
       },
       select: {
         id: true,

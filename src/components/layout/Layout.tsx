@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { ReactNode } from 'react'
 
-import { Footer } from '@/src/components/Footer'
-import { Nav } from '@/src/components/Nav'
+import { Footer } from '@/src/components/layout/Footer'
+import { Nav } from '@/src/components/layout/Nav'
 
 interface LayoutProps {
   children: ReactNode
