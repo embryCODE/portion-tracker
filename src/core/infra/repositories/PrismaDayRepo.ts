@@ -3,10 +3,29 @@ import prisma from '@/src/core/infra/prisma'
 
 export class PrismaDayRepo implements DayRepo {
   async getDayByDate(userId: string, date: Date) {
+    const startOfDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    )
+    const endOfDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate() + 1
+    )
+
     try {
       const day = await prisma.day.findFirst({
         where: {
-          AND: [{ authorId: userId }, { date: date }],
+          AND: [
+            { authorId: userId },
+            {
+              date: {
+                gte: startOfDate,
+                lt: endOfDate,
+              },
+            },
+          ],
         },
         select: {
           id: true,
@@ -16,7 +35,18 @@ export class PrismaDayRepo implements DayRepo {
           vegetables: true,
           carbs: true,
           fat: true,
-          plan: true,
+          plan: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              protein: true,
+              vegetables: true,
+              carbs: true,
+              fat: true,
+              meals: true,
+            },
+          },
         },
       })
 
@@ -65,7 +95,18 @@ export class PrismaDayRepo implements DayRepo {
           vegetables: true,
           carbs: true,
           fat: true,
-          plan: true,
+          plan: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              protein: true,
+              vegetables: true,
+              carbs: true,
+              fat: true,
+              meals: true,
+            },
+          },
         },
       })
 
