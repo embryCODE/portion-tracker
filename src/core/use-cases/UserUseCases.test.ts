@@ -21,13 +21,13 @@ describe('UserUseCases', () => {
     it('should return a user if found', async () => {
       const userUseCases = new UserUseCases(testUserRepo)
       const user = await userUseCases.getUserById('123')
-      expect(user).toEqual(testUser)
+      expect(user).toEqual({ ok: true, value: testUser })
     })
 
     it('should return null if user not found', async () => {
       const userUseCases = new UserUseCases(testUserRepo)
       const user = await userUseCases.getUserById('456')
-      expect(user).toBeNull()
+      expect(user).toStrictEqual({ ok: true, value: null })
     })
   })
 
@@ -35,13 +35,16 @@ describe('UserUseCases', () => {
     it('should update the user name and return the updated user', async () => {
       const userUseCases = new UserUseCases(testUserRepo)
       const user = await userUseCases.updateUserName('123', 'Mr. Furious')
-      expect(user).toEqual({ ...testUser, name: 'Mr. Furious' })
+      expect(user).toEqual({
+        ok: true,
+        value: { ...testUser, name: 'Mr. Furious' },
+      })
     })
 
     it('should return null if user not found', async () => {
       const userUseCases = new UserUseCases(testUserRepo)
       const user = await userUseCases.updateUserName('456', 'Mr. Furious')
-      expect(user).toBeNull()
+      expect(user).toStrictEqual({ ok: true, value: null })
     })
   })
 })

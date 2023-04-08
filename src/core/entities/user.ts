@@ -7,8 +7,8 @@ export interface User {
 }
 
 export interface UserRepo {
-  getUserById(id: string): Promise<User | null>
-  updateUserName(id: string, name: string): Promise<User | null>
+  getUserById(id: string): Promise<Result<User | null>>
+  updateUserName(id: string, name: string): Promise<Result<User | null>>
 }
 
 export function validateUserName(name: unknown): Result<string> {

@@ -9,17 +9,20 @@ export const testUser: User = {
 export class TestUserRepo implements UserRepo {
   public getUserById = (id: string) => {
     if (id === '123') {
-      return Promise.resolve(testUser)
+      return Promise.resolve({ ok: true as const, value: testUser })
     } else {
-      return Promise.resolve(null)
+      return Promise.resolve({ ok: true as const, value: null })
     }
   }
 
   public updateUserName = (id: string, name: string) => {
     if (id === '123') {
-      return Promise.resolve({ ...testUser, name })
+      return Promise.resolve({
+        ok: true as const,
+        value: { ...testUser, name },
+      })
     } else {
-      return Promise.resolve(null)
+      return Promise.resolve({ ok: true as const, value: null })
     }
   }
 }

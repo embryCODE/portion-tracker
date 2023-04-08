@@ -1,3 +1,5 @@
+import { Result } from '@/src/core/shared/typeUtils'
+
 export interface Plan {
   id: string
   name: string | null
@@ -10,7 +12,7 @@ export interface Plan {
 }
 
 export interface PlanRepo {
-  getAllPlansByUserId(userId: string): Promise<Plan[]>
-  getPlanById(id: string): Promise<Plan | null>
-  createOrUpdatePlan(userId: string, plan: Plan): Promise<Plan | null>
+  getAllPlansByUserId(userId: string): Promise<Result<Plan[]>>
+  getPlanById(id: string): Promise<Result<Plan | null>>
+  createOrUpdatePlan(userId: string, plan: Plan): Promise<Result<Plan | null>>
 }

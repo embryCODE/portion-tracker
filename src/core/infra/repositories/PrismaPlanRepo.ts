@@ -4,8 +4,8 @@ import prisma from '@/src/core/infra/prisma'
 import { Plan } from '.prisma/client'
 
 export class PrismaPlanRepo implements PlanRepo {
-  getAllPlansByUserId(id: string) {
-    return prisma.plan.findMany({
+  async getAllPlansByUserId(id: string) {
+    const plans = await prisma.plan.findMany({
       where: {
         id,
       },
@@ -20,9 +20,11 @@ export class PrismaPlanRepo implements PlanRepo {
         meals: true,
       },
     })
+
+    return { ok: true as const, value: plans }
   }
-  getPlanById(id: string) {
-    return prisma.plan.findUnique({
+  async getPlanById(id: string) {
+    const plan = await prisma.plan.findUnique({
       where: {
         id,
       },
@@ -37,9 +39,11 @@ export class PrismaPlanRepo implements PlanRepo {
         meals: true,
       },
     })
+
+    return { ok: true as const, value: plan }
   }
-  createOrUpdatePlan(userId: string, plan: Plan) {
-    return prisma.plan.upsert({
+  async createOrUpdatePlan(userId: string, plan: Plan) {
+    const newPlan = await prisma.plan.upsert({
       where: {
         id: plan.id,
       },
@@ -76,5 +80,7 @@ export class PrismaPlanRepo implements PlanRepo {
         meals: true,
       },
     })
+
+    return { ok: true as const, value: newPlan }
   }
 }

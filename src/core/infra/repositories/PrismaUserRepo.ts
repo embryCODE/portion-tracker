@@ -2,8 +2,8 @@ import { UserRepo } from '@/src/core/entities/user'
 import prisma from '@/src/core/infra/prisma'
 
 export class PrismaUserRepo implements UserRepo {
-  getUserById(id: string) {
-    return prisma.user.findUnique({
+  async getUserById(id: string) {
+    const user = await prisma.user.findUnique({
       where: {
         id,
       },
@@ -13,9 +13,11 @@ export class PrismaUserRepo implements UserRepo {
         image: true,
       },
     })
+
+    return { ok: true as const, value: user }
   }
-  updateUserName(id: string, name: string) {
-    return prisma.user.update({
+  async updateUserName(id: string, name: string) {
+    const user = await prisma.user.update({
       where: {
         id,
       },
@@ -28,5 +30,7 @@ export class PrismaUserRepo implements UserRepo {
         image: true,
       },
     })
+
+    return { ok: true as const, value: user }
   }
 }
