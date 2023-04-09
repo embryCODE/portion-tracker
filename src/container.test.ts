@@ -1,6 +1,6 @@
-import { TestDayRepo } from '@/src/core/infra/repositories/TestDayRepo'
-import { TestPlanRepo } from '@/src/core/infra/repositories/TestPlanRepo'
-import { TestUserRepo } from '@/src/core/infra/repositories/TestUserRepo'
+import { TestDayRepo } from '@/src/infra/repositories/TestDayRepo'
+import { TestPlanRepo } from '@/src/infra/repositories/TestPlanRepo'
+import { TestUserRepo } from '@/src/infra/repositories/TestUserRepo'
 
 import { Container } from './container'
 

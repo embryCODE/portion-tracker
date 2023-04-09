@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
 
-import { container } from '@/src/core/container'
-import { validateDay } from '@/src/core/entities/day'
+import { container } from '@/src/container'
 
 const secret = process.env.NEXTAUTH_SECRET
 
@@ -19,15 +18,10 @@ export default async function handler(
 
   try {
     if (req.method === 'GET') {
-      const dateString = req.query.date
-
-      if (typeof dateString !== 'string') {
-        res.status(400).send('Invalid date')
-        return
-      }
-
-      const date = new Date(dateString)
-      const days = await container.getDayByDate(token.sub, date)
+      const days = await container.getDayByDate(
+        token.sub,
+        req.query.date as string
+      )
 
       if (!days.ok) {
         res.status(400).json(days.error.message)
@@ -39,13 +33,6 @@ export default async function handler(
     }
 
     if (req.method === 'POST') {
-      const validatedDay = validateDay(req.body)
-
-      if (!validatedDay.ok) {
-        res.status(400).json(validatedDay.error.message)
-        return
-      }
-
       const days = await container.createOrUpdateDay(token.sub, req.body)
 
       if (!days.ok) {

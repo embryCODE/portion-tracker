@@ -1,5 +1,5 @@
 import { PlanRepo } from '@/src/core/entities/plan'
-import prisma from '@/src/core/infra/prisma'
+import prisma from '@/src/infra/prisma'
 
 import { Plan } from '.prisma/client'
 

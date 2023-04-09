@@ -1,14 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react'
 
 import Container from '@/src/components/layout/Container'
-import { User } from '@/src/core/entities/user'
-import { request } from '@/src/core/infra/net'
 import { useAuth } from '@/src/hooks/AuthProvider'
 
 export default function UserForm() {
-  const { user, update } = useAuth()
+  const { user, updateUser, isLoading } = useAuth()
   const [name, setName] = useState(user?.name || '')
-  const [isUpdating, setIsUpdating] = useState(false)
 
   useEffect(() => {
     setName(user?.name || '')
@@ -17,31 +14,15 @@ export default function UserForm() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    setIsUpdating(true)
+    if (!user) {
+      return
+    }
 
-    request<User>('/api/me', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name }),
-    })
-      .then((user) => {
-        update()
-
-        if (user.name) {
-          setName(user.name)
-        }
-      })
-      .catch((e) => {
-        console.error(e)
-        setName(user?.name || '')
-      })
-      .finally(() => {
-        setIsUpdating(false)
-      })
+    updateUser({ ...user, name })
   }
 
-  if (isUpdating) {
-    return <div>Updating...</div>
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
   // We should always have a user due to middleware

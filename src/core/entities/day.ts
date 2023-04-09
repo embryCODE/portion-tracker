@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import { Plan } from '@/src/core/entities/plan'
 import { Result } from '@/src/core/shared/typeUtils'
 
@@ -35,4 +37,17 @@ export function validateDay(day: any): Result<Day> {
   }
 
   return { ok: true, value: day as Day }
+}
+
+export function createEmptyDay(date: Date, plan: Plan) {
+  return {
+    id: uuidv4(),
+    notes: '',
+    date,
+    protein: 0,
+    vegetables: 0,
+    carbs: 0,
+    fat: 0,
+    plan,
+  }
 }

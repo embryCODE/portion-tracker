@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { Plan } from '@/src/core/entities/plan'
-import { request } from '@/src/core/infra/net'
+import { request } from '@/src/infra/net'
 
 export default function usePlans() {
   const [plans, setPlans] = useState<Plan[]>([])
@@ -10,10 +10,14 @@ export default function usePlans() {
   const getPlans = useCallback(async () => {
     setIsLoading(true)
 
-    const plans = await request<Plan[]>('/api/plans')
-
-    setPlans(plans)
-    setIsLoading(false)
+    try {
+      const plans = await request<Plan[]>('/api/plans')
+      setPlans(plans)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setIsLoading(false)
+    }
   }, [])
 
   useEffect(() => {
@@ -21,16 +25,20 @@ export default function usePlans() {
   }, [getPlans])
 
   const createOrUpdatePlan = useCallback(
-    async (plan: Plan) => {
+    async (plan?: Plan) => {
       setIsLoading(true)
 
-      await request<Plan>('/api/plans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(plan),
-      })
-
-      void getPlans()
+      try {
+        await request<Plan>('/api/plans', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(plan),
+        })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        void getPlans()
+      }
     },
     [getPlans]
   )
@@ -39,13 +47,17 @@ export default function usePlans() {
     async (plan: Plan) => {
       setIsLoading(true)
 
-      await request('/api/plans', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(plan),
-      })
-
-      void getPlans()
+      try {
+        await request('/api/plans', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(plan),
+        })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        void getPlans()
+      }
     },
     [getPlans]
   )

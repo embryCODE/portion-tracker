@@ -1,35 +1,54 @@
-import { DayRepo } from '@/src/core/entities/day'
-import { testDay, TestDayRepo } from '@/src/core/infra/repositories/TestDayRepo'
-import { DayUseCases } from '@/src/core/use-cases/DayUseCases'
+import { Container, makeTestContainer } from '@/src/container'
+import { createEmptyDay } from '@/src/core/entities/day'
+import { testDay } from '@/src/infra/repositories/TestDayRepo'
+import { testPlan } from '@/src/infra/repositories/TestPlanRepo'
+
+// noinspection JSUnusedGlobalSymbols
+jest.mock('uuid', () => ({ v4: () => '123456789' }))
 
 describe('DayUseCases', () => {
-  let testDayRepo: DayRepo
+  let testContainer: Container
 
   beforeEach(() => {
-    testDayRepo = new TestDayRepo()
+    testContainer = makeTestContainer()
+  })
+
+  describe('getDayByDate', () => {
+    it('should not create a day if there are no plans', async () => {
+      const date = new Date()
+      const day = await testContainer.getDayByDate('1', date.toISOString())
+
+      expect(day).toStrictEqual({
+        ok: false,
+        error: new Error('Cannot create a new day without at least one plan'),
+      })
+    })
+
+    it('should create a day if the day does not exist and there are plans', async () => {
+      const date = new Date('2020-01-01')
+      testContainer.createOrUpdatePlan('123', testPlan)
+      const day = await testContainer.getDayByDate('123', date.toISOString())
+
+      expect(day).toStrictEqual({
+        ok: true,
+        value: createEmptyDay(date, testPlan),
+      })
+    })
   })
 
   describe('createOrUpdateDay', () => {
-    it('should construct a DayUseCases object', () => {
-      const dayUseCases = new DayUseCases(testDayRepo)
-      expect(dayUseCases).toBeInstanceOf(DayUseCases)
-    })
-
     it('should create a day if not found', async () => {
-      const dayUseCases = new DayUseCases(testDayRepo)
-      const day = await dayUseCases.createOrUpdateDay('1', testDay)
+      const day = await testContainer.createOrUpdateDay('1', testDay)
 
       expect(day).toStrictEqual({ ok: true, value: testDay })
     })
 
     it('should update a day if found', async () => {
-      const dayUseCases = new DayUseCases(testDayRepo)
-
       // Create a day
-      await dayUseCases.createOrUpdateDay('1', testDay)
+      await testContainer.createOrUpdateDay('1', testDay)
 
       // Update the day
-      const updatedDay = await dayUseCases.createOrUpdateDay('1', {
+      const updatedDay = await testContainer.createOrUpdateDay('1', {
         ...testDay,
         notes: 'New notes',
       })

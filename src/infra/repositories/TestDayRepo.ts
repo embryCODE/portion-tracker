@@ -1,5 +1,5 @@
 import { Day, DayRepo } from '@/src/core/entities/day'
-import { testPlan } from '@/src/core/infra/repositories/TestPlanRepo'
+import { testPlan } from '@/src/infra/repositories/TestPlanRepo'
 
 export const testDay: Day = {
   id: '123',
@@ -13,13 +13,21 @@ export const testDay: Day = {
 }
 
 // In-memory database for testing
-const days: Day[] = [testDay]
+const days: Day[] = []
 
 export class TestDayRepo implements DayRepo {
-  public getDayByDate = (id: string) => {
+  public getDayByDate = (id: string, date: Date) => {
+    const startOfDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    )
+
     return Promise.resolve({
       ok: true as const,
-      value: days.find((day) => day.id === id) ?? null,
+      value:
+        days.find((day) => day.date.getDate() === startOfDate.getDate()) ??
+        null,
     })
   }
 

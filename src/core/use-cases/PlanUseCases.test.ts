@@ -1,38 +1,37 @@
-import { PlanRepo } from '@/src/core/entities/plan'
-import {
-  testPlan,
-  TestPlanRepo,
-} from '@/src/core/infra/repositories/TestPlanRepo'
-import { PlanUseCases } from '@/src/core/use-cases/PlanUseCases'
+import { Container, makeTestContainer } from '@/src/container'
+import { createEmptyPlan } from '@/src/core/entities/plan'
+import { testPlan } from '@/src/infra/repositories/TestPlanRepo'
+
+// noinspection JSUnusedGlobalSymbols
+jest.mock('uuid', () => ({ v4: () => '123456789' }))
 
 describe('PlanUseCases', () => {
-  let testPlanRepo: PlanRepo
+  let testContainer: Container
 
   beforeEach(() => {
-    testPlanRepo = new TestPlanRepo()
+    testContainer = makeTestContainer()
   })
 
   describe('createOrUpdatePlan', () => {
-    it('should construct a PlanUseCases object', () => {
-      const planUseCases = new PlanUseCases(testPlanRepo)
-      expect(planUseCases).toBeInstanceOf(PlanUseCases)
-    })
-
     it('should create a plan if not found', async () => {
-      const planUseCases = new PlanUseCases(testPlanRepo)
-      const plan = await planUseCases.createOrUpdatePlan('1', testPlan)
+      const plan = await testContainer.createOrUpdatePlan('1', testPlan)
 
       expect(plan).toStrictEqual({ ok: true, value: testPlan })
     })
 
-    it('should update a plan if found', async () => {
-      const planUseCases = new PlanUseCases(testPlanRepo)
+    it('should create an empty plan if a plan is not passed', async () => {
+      const plan = await testContainer.createOrUpdatePlan('1')
 
+      // uuid is mocked above
+      expect(plan).toStrictEqual({ ok: true, value: createEmptyPlan() })
+    })
+
+    it('should update a plan if found', async () => {
       // Create a plan
-      await planUseCases.createOrUpdatePlan('1', testPlan)
+      await testContainer.createOrUpdatePlan('1', testPlan)
 
       // Update the plan
-      const updatedPlan = await planUseCases.createOrUpdatePlan('1', {
+      const updatedPlan = await testContainer.createOrUpdatePlan('1', {
         ...testPlan,
         name: 'New name',
       })

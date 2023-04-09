@@ -1,40 +1,61 @@
-import { UserRepo } from '@/src/core/entities/user'
-import {
-  testUser,
-  TestUserRepo,
-} from '@/src/core/infra/repositories/TestUserRepo'
-import { UserUseCases } from '@/src/core/use-cases/UserUseCases'
+import { Container, makeTestContainer } from '@/src/container'
+import { testUser } from '@/src/infra/repositories/TestUserRepo'
 
 describe('UserUseCases', () => {
-  let testUserRepo: UserRepo
+  let testContainer: Container
 
   beforeEach(() => {
-    testUserRepo = new TestUserRepo()
+    testContainer = makeTestContainer()
   })
 
   describe('getUserById', () => {
-    it('should construct a UserUseCases object', () => {
-      const userUseCases = new UserUseCases(testUserRepo)
-      expect(userUseCases).toBeInstanceOf(UserUseCases)
-    })
-
     it('should return a user if found', async () => {
-      const userUseCases = new UserUseCases(testUserRepo)
-      const user = await userUseCases.getUserById('123')
+      const user = await testContainer.getUserById('123')
       expect(user).toEqual({ ok: true, value: testUser })
     })
 
     it('should return null if user not found', async () => {
-      const userUseCases = new UserUseCases(testUserRepo)
-      const user = await userUseCases.getUserById('456')
+      const user = await testContainer.getUserById('456')
       expect(user).toStrictEqual({ ok: true, value: null })
     })
   })
 
   describe('updateUserName', () => {
+    it('should return an error if name is not a string', async () => {
+      const user = await testContainer.updateUserName(
+        '123',
+        null as unknown as string
+      )
+
+      expect(user).toEqual({
+        ok: false,
+        error: new Error('Name must be a string'),
+      })
+    })
+
+    it('should return an error if name is too short', async () => {
+      const user = await testContainer.updateUserName('123', '')
+
+      expect(user).toEqual({
+        ok: false,
+        error: new Error('Name must be at least 1 character'),
+      })
+    })
+
+    it('should return an error if name is too long', async () => {
+      const user = await testContainer.updateUserName(
+        '123',
+        '123456789012345678901234567890123456789012345678901' // 51 characters
+      )
+
+      expect(user).toEqual({
+        ok: false,
+        error: new Error('Name must be at most 50 characters'),
+      })
+    })
+
     it('should update the user name and return the updated user', async () => {
-      const userUseCases = new UserUseCases(testUserRepo)
-      const user = await userUseCases.updateUserName('123', 'Mr. Furious')
+      const user = await testContainer.updateUserName('123', 'Mr. Furious')
       expect(user).toEqual({
         ok: true,
         value: { ...testUser, name: 'Mr. Furious' },
@@ -42,8 +63,7 @@ describe('UserUseCases', () => {
     })
 
     it('should return null if user not found', async () => {
-      const userUseCases = new UserUseCases(testUserRepo)
-      const user = await userUseCases.updateUserName('456', 'Mr. Furious')
+      const user = await testContainer.updateUserName('456', 'Mr. Furious')
       expect(user).toStrictEqual({ ok: true, value: null })
     })
   })

@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 import { Result } from '@/src/core/shared/typeUtils'
 
 export interface Plan {
@@ -36,4 +38,17 @@ export function validatePlan(plan: any): Result<Plan> {
   }
 
   return { ok: true, value: plan as Plan }
+}
+
+export function createEmptyPlan() {
+  return {
+    id: uuidv4(),
+    name: '',
+    description: '',
+    protein: 0,
+    vegetables: 0,
+    carbs: 0,
+    fat: 0,
+    meals: 0,
+  }
 }

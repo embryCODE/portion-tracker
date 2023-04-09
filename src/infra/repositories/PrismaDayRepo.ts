@@ -1,5 +1,5 @@
 import { Day, DayRepo } from '@/src/core/entities/day'
-import prisma from '@/src/core/infra/prisma'
+import prisma from '@/src/infra/prisma'
 
 export class PrismaDayRepo implements DayRepo {
   async getDayByDate(userId: string, date: Date) {

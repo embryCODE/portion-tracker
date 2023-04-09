@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
 
-import { container } from '@/src/core/container'
-import { validateUserName } from '@/src/core/entities/user'
+import { container } from '@/src/container'
 
 const secret = process.env.NEXTAUTH_SECRET
 
@@ -31,17 +30,7 @@ export default async function handler(
     }
 
     if (req.method === 'PUT') {
-      const validatedUserName = validateUserName(req.body.name)
-
-      if (!validatedUserName.ok) {
-        res.status(400).json(validatedUserName.error.message)
-        return
-      }
-
-      const user = await container.updateUserName(
-        token.sub,
-        validatedUserName.value
-      )
+      const user = await container.updateUserName(token.sub, req.body.name)
 
       if (!user.ok) {
         res.status(400).json(user.error.message)

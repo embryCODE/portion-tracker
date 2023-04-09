@@ -9,17 +9,17 @@ import {
 } from 'react'
 
 import { User } from '@/src/core/entities/user'
-import { request } from '@/src/core/infra/net'
+import { request } from '@/src/infra/net'
 
 export interface AuthContext {
   user: User | null
   isLoading: boolean
-  update: () => void
+  updateUser: (user: User) => void
 }
 const AuthContext = createContext<AuthContext>({
   user: null,
   isLoading: true,
-  update() {
+  updateUser() {
     // do nothing
   },
 })
@@ -27,42 +27,63 @@ const AuthContext = createContext<AuthContext>({
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { status } = useSession()
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isUpdatingFromServer, setIsUpdatingFromServer] = useState(true)
+  const [isUpdatingUser, setIsUpdatingUser] = useState(false)
 
-  const update = useCallback(() => {
-    setIsLoading(true)
+  const updateFromServer = useCallback(async () => {
+    setIsUpdatingFromServer(true)
 
     if (status === 'loading') {
-      setIsLoading(true)
+      setIsUpdatingFromServer(true)
       return
     }
 
     if (status === 'unauthenticated') {
       setUser(null)
-      setIsLoading(false)
+      setIsUpdatingFromServer(false)
       return
     }
 
-    request<User>('/api/me')
-      .then((user) => {
-        setUser(user)
-      })
-      .catch((e) => {
-        console.error(e)
-      })
-      .finally(() => {
-        setIsLoading(false)
-      })
+    try {
+      const user = await request<User>('/api/me')
+      setUser(user)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setIsUpdatingFromServer(false)
+    }
   }, [status])
 
   useEffect(() => {
-    update()
-  }, [update])
+    void updateFromServer()
+  }, [updateFromServer])
 
+  const updateUser = useCallback(
+    async (user: User) => {
+      setIsUpdatingUser(true)
+
+      try {
+        await request<User>('/api/me', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(user),
+        })
+
+        return updateFromServer()
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setIsUpdatingUser(false)
+      }
+    },
+    [updateFromServer]
+  )
+
+  const isLoading = isUpdatingFromServer || isUpdatingUser
   const value = {
     user,
+    updateUser,
     isLoading,
-    update,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

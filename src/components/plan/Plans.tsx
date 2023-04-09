@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
-
 import PlanForm from '@/src/components/plan/PlanForm'
 import { Plan } from '@/src/core/entities/plan'
 import usePlans from '@/src/hooks/usePlans'
@@ -8,16 +6,7 @@ export default function Plans() {
   const { plans, createOrUpdatePlan, isLoading, deletePlan } = usePlans()
 
   const handleNew = () => {
-    void createOrUpdatePlan({
-      id: uuidv4(),
-      name: '',
-      description: '',
-      protein: 0,
-      vegetables: 0,
-      carbs: 0,
-      fat: 0,
-      meals: 0,
-    })
+    void createOrUpdatePlan()
   }
 
   const handleSubmit = async (plan: Plan) => {

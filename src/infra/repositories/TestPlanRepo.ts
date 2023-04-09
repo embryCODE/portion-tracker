@@ -12,7 +12,7 @@ export const testPlan: Plan = {
 }
 
 // In-memory database for testing
-const plans: Plan[] = [testPlan]
+const plans: Plan[] = []
 
 export class TestPlanRepo implements PlanRepo {
   public getAllPlansByUserId = (userId: string) => {

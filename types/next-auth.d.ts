@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-unused-vars,@typescript-eslint/no-empty-interface,@typescript-eslint/no-unused-vars */
 // noinspection ES6UnusedImports,JSUnusedGlobalSymbols
 
 import NextAuth from 'next-auth'

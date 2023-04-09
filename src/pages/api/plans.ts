@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
 
-import { container } from '@/src/core/container'
-import { validatePlan } from '@/src/core/entities/plan'
+import { container } from '@/src/container'
 
 const secret = process.env.NEXTAUTH_SECRET
 
@@ -31,21 +30,14 @@ export default async function handler(
     }
 
     if (req.method === 'POST') {
-      const validatedPlan = validatePlan(req.body)
+      const plan = await container.createOrUpdatePlan(token.sub, req.body)
 
-      if (!validatedPlan.ok) {
-        res.status(400).json(validatedPlan.error.message)
+      if (!plan.ok) {
+        res.status(400).json(plan.error.message)
         return
       }
 
-      const plans = await container.createOrUpdatePlan(token.sub, req.body)
-
-      if (!plans.ok) {
-        res.status(400).json(plans.error.message)
-        return
-      }
-
-      res.json(plans.value)
+      res.json(plan.value)
       return
     }
 

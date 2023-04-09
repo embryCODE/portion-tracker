@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import PlanForm from '@/src/components/plan/PlanForm'
-import { testPlan } from '@/src/core/infra/repositories/TestPlanRepo'
+import { testPlan } from '@/src/infra/repositories/TestPlanRepo'
 
 describe('PlanForm', () => {
   const handleSubmit = jest.fn()
