@@ -20,12 +20,12 @@ describe('UserUseCases', () => {
     })
   })
 
-  describe('updateUserName', () => {
+  describe('updateUser', () => {
     it('should return an error if name is not a string', async () => {
-      const user = await testContainer.updateUserName(
-        '123',
-        null as unknown as string
-      )
+      const user = await testContainer.updateUser('123', {
+        ...testUser,
+        name: null as unknown as string,
+      })
 
       expect(user).toEqual({
         ok: false,
@@ -34,7 +34,10 @@ describe('UserUseCases', () => {
     })
 
     it('should return an error if name is too short', async () => {
-      const user = await testContainer.updateUserName('123', '')
+      const user = await testContainer.updateUser('123', {
+        ...testUser,
+        name: '',
+      })
 
       expect(user).toEqual({
         ok: false,
@@ -43,10 +46,10 @@ describe('UserUseCases', () => {
     })
 
     it('should return an error if name is too long', async () => {
-      const user = await testContainer.updateUserName(
-        '123',
-        '123456789012345678901234567890123456789012345678901' // 51 characters
-      )
+      const user = await testContainer.updateUser('123', {
+        ...testUser,
+        name: '123456789012345678901234567890123456789012345678901', // 51 characters
+      })
 
       expect(user).toEqual({
         ok: false,
@@ -55,7 +58,10 @@ describe('UserUseCases', () => {
     })
 
     it('should update the user name and return the updated user', async () => {
-      const user = await testContainer.updateUserName('123', 'Mr. Furious')
+      const user = await testContainer.updateUser('123', {
+        ...testUser,
+        name: 'Mr. Furious',
+      })
       expect(user).toEqual({
         ok: true,
         value: { ...testUser, name: 'Mr. Furious' },
@@ -63,7 +69,10 @@ describe('UserUseCases', () => {
     })
 
     it('should return null if user not found', async () => {
-      const user = await testContainer.updateUserName('456', 'Mr. Furious')
+      const user = await testContainer.updateUser('456', {
+        ...testUser,
+        name: 'Mr. Furious',
+      })
       expect(user).toStrictEqual({ ok: true, value: null })
     })
   })

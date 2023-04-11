@@ -1,12 +1,29 @@
 import PlanForm from '@/src/components/plan/PlanForm'
 import { Plan } from '@/src/core/entities/plan'
+import { useAuth } from '@/src/hooks/AuthProvider'
 import usePlans from '@/src/hooks/usePlans'
 
 export default function Plans() {
-  const { plans, createOrUpdatePlan, isLoading, deletePlan } = usePlans()
+  const { user, updateUser, isLoading: isUserLoading } = useAuth()
+  const {
+    plans,
+    createOrUpdatePlan,
+    isLoading: arePlansLoading,
+    deletePlan,
+  } = usePlans()
+
+  const isLoading = isUserLoading || arePlansLoading
 
   const handleNew = () => {
     void createOrUpdatePlan()
+  }
+
+  const handleMakeDefault = (plan: Plan) => async () => {
+    if (!user) {
+      return
+    }
+
+    await updateUser({ ...user, defaultPlanId: plan.id })
   }
 
   const handleSubmit = async (plan: Plan) => {
@@ -36,6 +53,8 @@ export default function Plans() {
             onSubmit={handleSubmit}
             isLoading={isLoading}
             onDelete={handleDelete}
+            isDefault={user?.defaultPlanId === plan.id}
+            onMakeDefault={handleMakeDefault(plan)}
           />
         </div>
       ))}

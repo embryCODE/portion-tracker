@@ -4,6 +4,7 @@ export const testUser: User = {
   name: 'Testy McTesterson',
   email: 'testymctesterson@example.com',
   image: null,
+  defaultPlanId: null,
 }
 
 export class TestUserRepo implements UserRepo {
@@ -15,11 +16,11 @@ export class TestUserRepo implements UserRepo {
     }
   }
 
-  public updateUserName = (id: string, name: string) => {
+  public updateUser = (id: string, user: User) => {
     if (id === '123') {
       return Promise.resolve({
         ok: true as const,
-        value: { ...testUser, name },
+        value: { ...testUser, ...user },
       })
     } else {
       return Promise.resolve({ ok: true as const, value: null })

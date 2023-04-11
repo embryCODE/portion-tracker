@@ -1,4 +1,4 @@
-import { UserRepo } from '@/src/core/entities/user'
+import { User, UserRepo } from '@/src/core/entities/user'
 import prisma from '@/src/infra/prisma'
 
 export class PrismaUserRepo implements UserRepo {
@@ -12,6 +12,7 @@ export class PrismaUserRepo implements UserRepo {
           name: true,
           email: true,
           image: true,
+          defaultPlanId: true,
         },
       })
 
@@ -24,23 +25,22 @@ export class PrismaUserRepo implements UserRepo {
       }
     }
   }
-  async updateUserName(id: string, name: string) {
+  async updateUser(id: string, user: User) {
     try {
-      const user = await prisma.user.update({
+      const newUser = await prisma.user.update({
         where: {
           id,
         },
-        data: {
-          name,
-        },
+        data: user,
         select: {
           name: true,
           email: true,
           image: true,
+          defaultPlanId: true,
         },
       })
 
-      return { ok: true as const, value: user }
+      return { ok: true as const, value: newUser }
     } catch (e) {
       if (e instanceof Error) {
         return { ok: false as const, error: e }

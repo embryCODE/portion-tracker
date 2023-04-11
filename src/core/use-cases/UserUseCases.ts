@@ -1,4 +1,4 @@
-import { UserRepo, validateUserName } from '@/src/core/entities/user'
+import { User, UserRepo, validateUserName } from '@/src/core/entities/user'
 
 export class UserUseCases {
   userRepo: UserRepo
@@ -8,14 +8,14 @@ export class UserUseCases {
     this.getUserById = userRepo.getUserById
   }
 
-  public updateUserName(userId: string, name: string) {
-    const validatedUserName = validateUserName(name)
+  public updateUser(userId: string, user: User) {
+    const validatedUserName = validateUserName(user.name)
 
     if (!validatedUserName.ok) {
       return validatedUserName
     }
 
-    return this.userRepo.updateUserName(userId, validatedUserName.value)
+    return this.userRepo.updateUser(userId, user)
   }
 
   public getUserById

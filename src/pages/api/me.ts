@@ -30,7 +30,7 @@ export default async function handler(
     }
 
     if (req.method === 'PUT') {
-      const user = await container.updateUserName(token.sub, req.body.name)
+      const user = await container.updateUser(token.sub, req.body)
 
       if (!user.ok) {
         res.status(400).json(user.error.message)

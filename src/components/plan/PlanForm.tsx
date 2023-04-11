@@ -6,7 +6,9 @@ interface PlanProps {
   plan: PlanType
   onSubmit: (plan: PlanType) => void
   onDelete: (plan: PlanType) => void
+  onMakeDefault: () => void
   isLoading: boolean
+  isDefault: boolean
 }
 
 export default function PlanForm({
@@ -14,6 +16,8 @@ export default function PlanForm({
   onSubmit,
   isLoading,
   onDelete,
+  isDefault,
+  onMakeDefault,
 }: PlanProps) {
   const [name, setName] = useState(plan.name || '')
   const [description, setDescription] = useState(plan.description || '')
@@ -63,6 +67,22 @@ export default function PlanForm({
 
   return (
     <form className={'tw-border tw-rounded tw-p-2'} onSubmit={handleSubmit}>
+      <div>
+        {isDefault ? (
+          <span>Default</span>
+        ) : (
+          <button
+            className={
+              'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-mb-2'
+            }
+            type="button"
+            onClick={onMakeDefault}
+          >
+            Make default
+          </button>
+        )}
+      </div>
+
       <label htmlFor={'name'}>Name</label>
       <input
         id={'name'}

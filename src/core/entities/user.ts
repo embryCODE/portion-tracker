@@ -4,11 +4,12 @@ export interface User {
   name: string | null
   email: string | null
   image: string | null
+  defaultPlanId: string | null
 }
 
 export interface UserRepo {
   getUserById(id: string): Promise<Result<User | null>>
-  updateUserName(id: string, name: string): Promise<Result<User | null>>
+  updateUser(id: string, user: User): Promise<Result<User | null>>
 }
 
 export function validateUserName(name: unknown): Result<string> {

@@ -25,7 +25,7 @@ export class Container {
     const dayUseCases = new DayUseCases(dayRepo, planRepo)
 
     this.getUserById = userUseCases.getUserById.bind(userUseCases)
-    this.updateUserName = userUseCases.updateUserName.bind(userUseCases)
+    this.updateUser = userUseCases.updateUser.bind(userUseCases)
 
     this.getAllPlansByUserId =
       planUseCases.getAllPlansByUserId.bind(planUseCases)
@@ -39,7 +39,7 @@ export class Container {
   }
 
   public getUserById
-  public updateUserName
+  public updateUser
 
   public getAllPlansByUserId
   public getPlanById
