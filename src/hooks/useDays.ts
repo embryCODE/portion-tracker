@@ -25,6 +25,25 @@ export default function useDays() {
     void getDayByDate()
   }, [getDayByDate])
 
+  const createOrUpdateDay = useCallback(
+    async (day: Day) => {
+      setIsLoading(true)
+
+      try {
+        await request('/api/days', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(day),
+        })
+      } catch (e) {
+        console.error(e)
+      } finally {
+        void getDayByDate()
+      }
+    },
+    [getDayByDate]
+  )
+
   const deleteDay = useCallback(
     async (day: Day) => {
       setIsLoading(true)
@@ -38,7 +57,7 @@ export default function useDays() {
       } catch (e) {
         console.error(e)
       } finally {
-        void getDayByDate
+        void getDayByDate()
       }
     },
     [getDayByDate]
@@ -49,5 +68,6 @@ export default function useDays() {
     isLoading,
     deleteDay,
     setDate,
+    createOrUpdateDay,
   }
 }

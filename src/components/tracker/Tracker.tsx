@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 
+import DayForm from '@/src/components/tracker/DayForm'
 import useDays from '@/src/hooks/useDays'
 
 export default function Tracker() {
@@ -23,7 +24,7 @@ export default function Tracker() {
         </button>
       </div>
 
-      <pre>{JSON.stringify(day, null, 2)}</pre>
+      {day && <DayForm day={day} />}
     </div>
   )
 }
