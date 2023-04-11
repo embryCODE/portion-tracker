@@ -1,7 +1,5 @@
-import { PlanRepo } from '@/src/core/entities/plan'
+import { Plan, PlanRepo } from '@/src/core/entities/plan'
 import prisma from '@/src/infra/prisma'
-
-import { Plan } from '.prisma/client'
 
 export class PrismaPlanRepo implements PlanRepo {
   async getAllPlansByUserId(userId: string) {

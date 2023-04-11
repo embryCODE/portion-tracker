@@ -22,7 +22,11 @@ export class Container {
   constructor({ userRepo, planRepo, dayRepo }: ContainerDeps) {
     const userUseCases = new UserUseCases(userRepo)
     const planUseCases = new PlanUseCases(planRepo)
-    const dayUseCases = new DayUseCases(dayRepo, planRepo)
+    const dayUseCases = new DayUseCases({
+      userRepo: userRepo,
+      dayRepo: dayRepo,
+      planRepo: planRepo,
+    })
 
     this.getUserById = userUseCases.getUserById.bind(userUseCases)
     this.updateUser = userUseCases.updateUser.bind(userUseCases)

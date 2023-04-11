@@ -58,20 +58,20 @@ model VerificationToken {
 }
 
 model Plan {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  name          String?
-  description   String?
-  protein       Float
-  vegetables    Float
-  carbs         Float
-  fat           Float
-  meals         Int
-  author        User     @relation(fields: [authorId], references: [id])
-  authorId      String
-  days          Day[]
-  defaultPlan   User?    @relation("defaultPlan")
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String?
+  description    String?
+  protein        Float
+  vegetables     Float
+  carbs          Float
+  fat            Float
+  meals          Int
+  author         User     @relation(fields: [authorId], references: [id])
+  authorId       String
+  days           Day[]
+  defaultPlan    User?    @relation("defaultPlan")
 }
 
 model Day {

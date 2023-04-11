@@ -5,12 +5,23 @@ import {
   validateDay,
 } from '@/src/core/entities/day'
 import { PlanRepo } from '@/src/core/entities/plan'
+import { UserRepo } from '@/src/core/entities/user'
 
 export class DayUseCases {
+  userRepo: UserRepo
   dayRepo: DayRepo
   planRepo: PlanRepo
 
-  constructor(dayRepo: DayRepo, planRepo: PlanRepo) {
+  constructor({
+    userRepo,
+    dayRepo,
+    planRepo,
+  }: {
+    userRepo: UserRepo
+    dayRepo: DayRepo
+    planRepo: PlanRepo
+  }) {
+    this.userRepo = userRepo
     this.dayRepo = dayRepo
     this.planRepo = planRepo
     this.deleteDay = dayRepo.deleteDay
@@ -22,6 +33,24 @@ export class DayUseCases {
     }
 
     const date = new Date(iso)
+
+    const userResult = await this.userRepo.getUserById(userId)
+
+    if (!userResult.ok) {
+      return {
+        ok: false as const,
+        error: new Error('Unknown error'),
+      }
+    }
+
+    const user = userResult.value
+
+    if (!user) {
+      return {
+        ok: false as const,
+        error: new Error('User not found'),
+      }
+    }
 
     let day = await this.dayRepo.getDayByDate(userId, date)
 
@@ -42,16 +71,20 @@ export class DayUseCases {
         }
       }
 
-      if (!plans.value.length) {
+      const defaultPlan = plans.value.find(
+        (plan) => user.defaultPlanId === plan.id
+      )
+
+      if (!defaultPlan) {
         return {
           ok: false as const,
-          error: new Error('Cannot create a new day without at least one plan'),
+          error: new Error('Cannot create a new day without a default plan'),
         }
       }
 
       day = await this.createOrUpdateDay(
         userId,
-        createEmptyDay(date, plans.value[0])
+        createEmptyDay(date, defaultPlan)
       )
     }
 
