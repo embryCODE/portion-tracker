@@ -1,18 +1,24 @@
 import { FormEvent, useEffect, useState } from 'react'
 
+import MacroInput from '@/src/components/tracker/MacroInput'
 import { Day } from '@/src/core/entities/day'
 import { Plan } from '@/src/core/entities/plan'
-import useDays from '@/src/hooks/useDays'
 
-export default function DayForm({ day, plans }: { day: Day; plans: Plan[] }) {
+export default function DayForm({
+  day,
+  plans,
+  createOrUpdateDay,
+}: {
+  day: Day
+  plans: Plan[]
+  createOrUpdateDay: (day: Day) => Promise<void>
+}) {
   const [protein, setProtein] = useState(day.protein)
   const [vegetables, setVegetables] = useState(day.vegetables)
   const [carbs, setCarbs] = useState(day.carbs)
   const [fat, setFat] = useState(day.fat)
   const [notes, setNotes] = useState(day.notes ?? '')
   const [plan, setPlan] = useState(day.plan)
-
-  const { createOrUpdateDay, isLoading } = useDays()
 
   useEffect(() => {
     setProtein(day.protein)
@@ -22,21 +28,6 @@ export default function DayForm({ day, plans }: { day: Day; plans: Plan[] }) {
     setNotes(day.notes ?? '')
     setPlan(day.plan)
   }, [day])
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    void createOrUpdateDay({
-      id: day.id,
-      date: day.date,
-      notes,
-      protein,
-      vegetables,
-      carbs,
-      fat,
-      plan,
-    })
-  }
 
   const handlePlanSelection = (e: FormEvent<HTMLSelectElement>) => {
     const selectedPlan = plans.find((plan) => plan.id === e.currentTarget.value)
@@ -52,53 +43,44 @@ export default function DayForm({ day, plans }: { day: Day; plans: Plan[] }) {
     vegetables !== day.vegetables ||
     carbs !== day.carbs ||
     fat !== day.fat ||
-    plan !== day.plan
+    plan?.id !== day.plan?.id
+
+  useEffect(() => {
+    if (!hasChanged) return
+
+    void createOrUpdateDay({
+      id: day.id,
+      date: day.date,
+      notes,
+      protein,
+      vegetables,
+      carbs,
+      fat,
+      plan,
+    })
+  }, [
+    carbs,
+    createOrUpdateDay,
+    day.date,
+    day.id,
+    fat,
+    hasChanged,
+    notes,
+    plan,
+    protein,
+    vegetables,
+  ])
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor={'protein'}>Protein</label>
-      <input
-        id={'protein'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={protein}
-        onChange={(e) => setProtein(parseInt(e.target.value))}
-      />
-
-      <label htmlFor={'vegetables'}>Vegetables</label>
-      <input
-        id={'vegetables'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
+    <form>
+      <MacroInput label={'Protein'} onChange={setProtein} value={protein} />
+      <MacroInput
+        label={'Vegetables'}
+        onChange={setVegetables}
         value={vegetables}
-        onChange={(e) => setVegetables(parseInt(e.target.value))}
       />
-
-      <label htmlFor={'carbs'}>Carbs</label>
-      <input
-        id={'carbs'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={carbs}
-        onChange={(e) => setCarbs(parseInt(e.target.value))}
-      />
-
-      <label htmlFor={'fat'}>Fat</label>
-      <input
-        id={'fat'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={fat}
-        onChange={(e) => setFat(parseInt(e.target.value))}
-      />
+      <MacroInput label={'Carbs'} onChange={setCarbs} value={carbs} />
+      <MacroInput label={'Fat'} onChange={setFat} value={fat} />
 
       <label htmlFor={'notes'}>Notes</label>
       <textarea
@@ -125,19 +107,6 @@ export default function DayForm({ day, plans }: { day: Day; plans: Plan[] }) {
           </option>
         ))}
       </select>
-
-      {!isLoading && hasChanged && (
-        <button
-          className={
-            'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-ml-2'
-          }
-          type="submit"
-        >
-          Update
-        </button>
-      )}
-
-      {isLoading && <div>Loading...</div>}
     </form>
   )
 }
