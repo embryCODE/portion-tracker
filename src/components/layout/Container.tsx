@@ -10,7 +10,7 @@ const Container = ({
 }) => (
   <div
     className={classNames(
-      'tw-mx-auto tw-max-w-7xl tw-px-4 tw-py-4 lg:tw-px-8',
+      'tw-mx-auto tw-max-w-5xl tw-px-4 tw-py-4 lg:tw-px-8',
       isProse && 'tw-prose'
     )}
   >

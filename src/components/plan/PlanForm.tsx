@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react'
+import { FaSave } from 'react-icons/fa'
 
 import { Plan as PlanType } from '../../core/entities/plan'
 
@@ -67,13 +68,13 @@ export default function PlanForm({
 
   return (
     <form className={'tw-border tw-rounded tw-p-2'} onSubmit={handleSubmit}>
-      <div>
+      <div className={'tw-mb-2 tw-flex tw-items-center tw-space-x-2'}>
         {isDefault ? (
-          <span>Default</span>
+          <span className={'tw-font-bold tw-text-carbs'}>Default</span>
         ) : (
           <button
             className={
-              'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-mb-2'
+              'tw-rounded tw-bg-carbs tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-mb-2'
             }
             type="button"
             onClick={onMakeDefault}
@@ -81,105 +82,121 @@ export default function PlanForm({
             Make default
           </button>
         )}
+
+        {isLoading && <FaSave />}
       </div>
 
-      <label htmlFor={'name'}>Name</label>
-      <input
-        id={'name'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+      <div>
+        <label htmlFor={'name'}>Name</label>
+        <input
+          id={'name'}
+          className={
+            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
+          }
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
 
-      <label htmlFor={'description'}>Description</label>
-      <textarea
-        id={'description'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+      <div className={'tw-inline-block tw-mt-4'}>
+        <label htmlFor={'protein'}>Protein</label>
+        <input
+          id={'protein'}
+          type={'number'}
+          className={
+            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
+          }
+          value={protein}
+          onChange={(e) => setProtein(parseInt(e.target.value))}
+        />
+      </div>
 
-      <label htmlFor={'protein'}>Protein</label>
-      <input
-        id={'protein'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={protein}
-        onChange={(e) => setProtein(parseInt(e.target.value))}
-      />
+      <div className={'tw-inline-block'}>
+        <label htmlFor={'vegetables'}>Vegetables</label>
+        <input
+          id={'vegetables'}
+          type={'number'}
+          className={
+            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
+          }
+          value={vegetables}
+          onChange={(e) => setVegetables(parseInt(e.target.value))}
+        />
+      </div>
 
-      <label htmlFor={'vegetables'}>Vegetables</label>
-      <input
-        id={'vegetables'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={vegetables}
-        onChange={(e) => setVegetables(parseInt(e.target.value))}
-      />
+      <div className={'tw-inline-block'}>
+        <label htmlFor={'carbs'}>Carbs</label>
+        <input
+          id={'carbs'}
+          type={'number'}
+          className={
+            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
+          }
+          value={carbs}
+          onChange={(e) => setCarbs(parseInt(e.target.value))}
+        />
+      </div>
 
-      <label htmlFor={'carbs'}>Carbs</label>
-      <input
-        id={'carbs'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={carbs}
-        onChange={(e) => setCarbs(parseInt(e.target.value))}
-      />
+      <div className={'tw-inline-block'}>
+        <label htmlFor={'fat'}>Fat</label>
+        <input
+          id={'fat'}
+          type={'number'}
+          className={
+            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
+          }
+          value={fat}
+          onChange={(e) => setFat(parseInt(e.target.value))}
+        />
+      </div>
 
-      <label htmlFor={'fat'}>Fat</label>
-      <input
-        id={'fat'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={fat}
-        onChange={(e) => setFat(parseInt(e.target.value))}
-      />
+      <div className={'tw-mt-4'}>
+        <label htmlFor={'meals'}>Meals per day</label>
+        <input
+          id={'meals'}
+          type={'number'}
+          className={
+            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
+          }
+          value={meals}
+          onChange={(e) => setMeals(parseInt(e.target.value))}
+        />
+      </div>
 
-      <label htmlFor={'meals'}>Meals</label>
-      <input
-        id={'meals'}
-        type={'number'}
-        className={
-          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-        }
-        value={meals}
-        onChange={(e) => setMeals(parseInt(e.target.value))}
-      />
+      <div className={'tw-mt-4'}>
+        <label htmlFor={'description'}>Description</label>
+        <textarea
+          id={'description'}
+          className={
+            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block tw-w-full'
+          }
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
 
-      <button
-        className={
-          'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1'
-        }
-        type="button"
-        onClick={handleDelete}
-      >
-        Delete
-      </button>
-
-      {!isLoading && hasChanged && (
+      <div className={'tw-flex tw-mt-4'}>
         <button
           className={
-            'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-ml-2'
+            'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1'
           }
-          type="submit"
+          type="button"
+          onClick={handleDelete}
         >
-          Update
+          Delete
         </button>
-      )}
 
-      {isLoading && <div>Loading...</div>}
+        {!isLoading && hasChanged && (
+          <button
+            className={
+              'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-ml-2'
+            }
+            type="submit"
+          >
+            Update
+          </button>
+        )}
+      </div>
     </form>
   )
 }

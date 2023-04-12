@@ -25,7 +25,7 @@ export class PrismaUserRepo implements UserRepo {
       }
     }
   }
-  async updateUser(id: string, user: User) {
+  async updateUser(id: string, user: Partial<User>) {
     try {
       const newUser = await prisma.user.update({
         where: {

@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
-const requireAuth = ['/settings']
+const requireAuth = ['/settings', '/tracker']
 
 export async function middleware(request: NextRequest) {
   if (requireAuth.some((path) => request.nextUrl.pathname.startsWith(path))) {

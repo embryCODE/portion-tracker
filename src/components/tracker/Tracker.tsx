@@ -74,13 +74,13 @@ export default function Tracker() {
           <FaArrowLeft />
         </button>
 
-        {dayJs.format('MMM D, YYYY')}
+        {dayJs.format('ddd MMM D, YYYY')}
 
         <button className={'tw-ml-2'} onClick={nextDay} title={'Next day'}>
           <FaArrowRight />
         </button>
 
-        {isLoading && <FaSave className={'tw-ml-2 fa-spin'} />}
+        {isLoading && <FaSave className={'tw-ml-2'} />}
       </div>
 
       <section className={'tw-mt-4'}>

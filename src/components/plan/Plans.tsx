@@ -4,7 +4,12 @@ import { useAuth } from '@/src/hooks/AuthProvider'
 import usePlans from '@/src/hooks/usePlans'
 
 export default function Plans() {
-  const { user, updateUser, isLoading: isUserLoading } = useAuth()
+  const {
+    user,
+    updateUser,
+    isLoading: isUserLoading,
+    updateFromServer,
+  } = useAuth()
   const {
     plans,
     createOrUpdatePlan,
@@ -14,8 +19,12 @@ export default function Plans() {
 
   const isLoading = isUserLoading || arePlansLoading
 
-  const handleNew = () => {
-    void createOrUpdatePlan()
+  const handleNew = async () => {
+    await createOrUpdatePlan()
+
+    // If this was a new plan, the user has had it set as their defaul plan. We
+    // need to update the user from the server to reflect this.
+    void updateFromServer()
   }
 
   const handleMakeDefault = (plan: Plan) => async () => {
@@ -26,7 +35,7 @@ export default function Plans() {
     await updateUser({ ...user, defaultPlanId: plan.id })
   }
 
-  const handleSubmit = async (plan: Plan) => {
+  const handleSubmit = (plan: Plan) => {
     void createOrUpdatePlan(plan)
   }
 

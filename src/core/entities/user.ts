@@ -9,7 +9,7 @@ export interface User {
 
 export interface UserRepo {
   getUserById(id: string): Promise<Result<User | null>>
-  updateUser(id: string, user: User): Promise<Result<User | null>>
+  updateUser(id: string, user: Partial<User>): Promise<Result<User | null>>
 }
 
 export function validateUserName(name: unknown): Result<string> {

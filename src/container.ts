@@ -21,11 +21,11 @@ interface ContainerDeps {
 export class Container {
   constructor({ userRepo, planRepo, dayRepo }: ContainerDeps) {
     const userUseCases = new UserUseCases(userRepo)
-    const planUseCases = new PlanUseCases(planRepo)
+    const planUseCases = new PlanUseCases({ planRepo, userRepo })
     const dayUseCases = new DayUseCases({
-      userRepo: userRepo,
-      dayRepo: dayRepo,
-      planRepo: planRepo,
+      userRepo,
+      dayRepo,
+      planRepo,
     })
 
     this.getUserById = userUseCases.getUserById.bind(userUseCases)

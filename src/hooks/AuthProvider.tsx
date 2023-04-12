@@ -15,11 +15,15 @@ export interface AuthContext {
   user: User | null
   isLoading: boolean
   updateUser: (user: User) => void
+  updateFromServer: () => void
 }
 const AuthContext = createContext<AuthContext>({
   user: null,
   isLoading: true,
   updateUser() {
+    // do nothing
+  },
+  updateFromServer() {
     // do nothing
   },
 })
@@ -83,6 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     user,
     updateUser,
+    updateFromServer,
     isLoading,
   }
 

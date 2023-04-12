@@ -32,8 +32,8 @@ export default async function handler(
     if (req.method === 'POST') {
       const plan = await container.createOrUpdatePlan(token.sub, req.body)
 
-      if (!plan.ok) {
-        res.status(400).json(plan.error.message)
+      if (!plan?.ok) {
+        res.status(400).json(plan?.error.message ?? 'Unknown error')
         return
       }
 
