@@ -21,7 +21,7 @@ export default function Tracker() {
 
   return (
     <div>
-      <div className={'tw-prose tw-mt-4'}>
+      <div className={'tw-prose tw-mt-4 tw-text-sm md:tw-text-base'}>
         <table>
           <thead>
             <tr>
@@ -30,7 +30,7 @@ export default function Tracker() {
                 Protein
               </th>
               <th className={'tw-text-veg tw-font-bold tw-uppercase'}>
-                Vegetables
+                Veggies
               </th>
               <th className={'tw-text-carbs tw-font-bold tw-uppercase'}>
                 Carbs
