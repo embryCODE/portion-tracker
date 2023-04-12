@@ -193,7 +193,7 @@ export default function PlanForm({
             }
             type="submit"
           >
-            Update
+            Save changes
           </button>
         )}
       </div>

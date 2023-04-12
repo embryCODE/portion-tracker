@@ -37,13 +37,16 @@ export function Nav() {
             <div className={'tw-flex tw-items-center tw-space-x-4 '}>
               {user ? (
                 <>
-                  <span className={'tw-text-carbs tw-text-sm'}>
+                  <span
+                    className={'tw-text-carbs tw-text-sm tw-hidden sm:tw-block'}
+                  >
                     {user.email}
                   </span>
 
                   <MyLink
                     href="/api/auth/signout"
                     activeClassName={'tw-font-bold'}
+                    className={'tw-flex-shrink-0'}
                   >
                     Sign out
                   </MyLink>

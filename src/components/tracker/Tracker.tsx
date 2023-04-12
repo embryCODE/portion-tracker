@@ -101,7 +101,7 @@ function calculatePerMeal(
   meals: number | undefined
 ) {
   if (!macro || !meals) {
-    return 0
+    return undefined
   }
 
   const roundedUp = Math.ceil(macro / meals)
