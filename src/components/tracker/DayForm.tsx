@@ -1,15 +1,16 @@
 import { FormEvent, useEffect, useState } from 'react'
 
 import { Day } from '@/src/core/entities/day'
+import { Plan } from '@/src/core/entities/plan'
 import useDays from '@/src/hooks/useDays'
 
-export default function DayForm({ day }: { day: Day }) {
-  const [protein, setProtein] = useState(day?.protein ?? 0)
-  const [vegetables, setVegetables] = useState(day?.vegetables ?? 0)
-  const [carbs, setCarbs] = useState(day?.carbs ?? 0)
-  const [fat, setFat] = useState(day?.fat ?? 0)
-  const [notes, setNotes] = useState(day?.notes ?? '')
-  const [plan, setPlan] = useState(day?.plan)
+export default function DayForm({ day, plans }: { day: Day; plans: Plan[] }) {
+  const [protein, setProtein] = useState(day.protein)
+  const [vegetables, setVegetables] = useState(day.vegetables)
+  const [carbs, setCarbs] = useState(day.carbs)
+  const [fat, setFat] = useState(day.fat)
+  const [notes, setNotes] = useState(day.notes ?? '')
+  const [plan, setPlan] = useState(day.plan)
 
   const { createOrUpdateDay, isLoading } = useDays()
 
@@ -35,6 +36,14 @@ export default function DayForm({ day }: { day: Day }) {
       fat,
       plan,
     })
+  }
+
+  const handlePlanSelection = (e: FormEvent<HTMLSelectElement>) => {
+    const selectedPlan = plans.find((plan) => plan.id === e.currentTarget.value)
+
+    if (selectedPlan) {
+      setPlan(selectedPlan)
+    }
   }
 
   const hasChanged =
@@ -101,7 +110,21 @@ export default function DayForm({ day }: { day: Day }) {
         onChange={(e) => setNotes(e.target.value)}
       />
 
-      <div className={'tw-mt-2'}>Plan ID: {plan.id}</div>
+      <label htmlFor={'plan'}>Plan</label>
+      <select
+        id={'plan'}
+        className={
+          'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
+        }
+        value={plan.id}
+        onChange={handlePlanSelection}
+      >
+        {plans.map((planOption) => (
+          <option key={planOption.id} value={planOption.id}>
+            {planOption.name ?? planOption.id}
+          </option>
+        ))}
+      </select>
 
       {!isLoading && hasChanged && (
         <button

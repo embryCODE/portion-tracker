@@ -2,9 +2,11 @@ import dayjs from 'dayjs'
 
 import DayForm from '@/src/components/tracker/DayForm'
 import useDays from '@/src/hooks/useDays'
+import usePlans from '@/src/hooks/usePlans'
 
 export default function Tracker() {
   const { day, setDate } = useDays()
+  const { plans } = usePlans()
 
   const dayJs = dayjs(day?.date)
   const prevDay = () => setDate(dayJs.subtract(1, 'day').toDate())
@@ -24,7 +26,7 @@ export default function Tracker() {
         </button>
       </div>
 
-      {day && <DayForm day={day} />}
+      {day && plans && <DayForm day={day} plans={plans} />}
     </div>
   )
 }
