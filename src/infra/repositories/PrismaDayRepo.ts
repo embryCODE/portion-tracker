@@ -1,4 +1,5 @@
 import { Day, DayRepo } from '@/src/core/entities/day'
+import { Result } from '@/src/core/shared/result'
 import prisma from '@/src/infra/prisma'
 
 export class PrismaDayRepo implements DayRepo {
@@ -50,12 +51,12 @@ export class PrismaDayRepo implements DayRepo {
         },
       })
 
-      return { ok: true as const, value: day }
+      return Result.ok(day)
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }
@@ -110,12 +111,12 @@ export class PrismaDayRepo implements DayRepo {
         },
       })
 
-      return { ok: true as const, value: newDay }
+      return Result.ok(newDay)
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }
@@ -128,12 +129,12 @@ export class PrismaDayRepo implements DayRepo {
         },
       })
 
-      return { ok: true as const, value: true as never }
+      return Result.ok()
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }

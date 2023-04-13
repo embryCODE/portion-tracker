@@ -1,4 +1,5 @@
 import { User, UserRepo } from '@/src/core/entities/user'
+import { Result } from '@/src/core/shared/result'
 import prisma from '@/src/infra/prisma'
 
 export class PrismaUserRepo implements UserRepo {
@@ -16,12 +17,12 @@ export class PrismaUserRepo implements UserRepo {
         },
       })
 
-      return { ok: true as const, value: user }
+      return Result.ok(user)
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }
@@ -40,12 +41,12 @@ export class PrismaUserRepo implements UserRepo {
         },
       })
 
-      return { ok: true as const, value: newUser }
+      return Result.ok(newUser)
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }

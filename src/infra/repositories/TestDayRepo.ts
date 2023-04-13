@@ -1,4 +1,5 @@
 import { Day, DayRepo } from '@/src/core/entities/day'
+import { Result } from '@/src/core/shared/result'
 import { testPlan } from '@/src/infra/repositories/TestPlanRepo'
 
 export const testDay: Day = {
@@ -23,12 +24,11 @@ export class TestDayRepo implements DayRepo {
       date.getDate()
     )
 
-    return Promise.resolve({
-      ok: true as const,
-      value:
-        days.find((day) => day.date.getDate() === startOfDate.getDate()) ??
-        null,
-    })
+    return Promise.resolve(
+      Result.ok(
+        days.find((day) => day.date.getDate() === startOfDate.getDate()) ?? null
+      )
+    )
   }
 
   public createOrUpdateDay = (userId: string, day: Day) => {
@@ -37,10 +37,10 @@ export class TestDayRepo implements DayRepo {
     if (foundDay) {
       const index = days.indexOf(foundDay)
       days[index] = day
-      return Promise.resolve({ ok: true as const, value: day })
+      return Promise.resolve(Result.ok(day))
     } else {
       days.push(day)
-      return Promise.resolve({ ok: true as const, value: day })
+      return Promise.resolve(Result.ok(day))
     }
   }
 
@@ -50,12 +50,9 @@ export class TestDayRepo implements DayRepo {
     if (foundDay) {
       const index = days.indexOf(foundDay)
       days.splice(index, 1)
-      return Promise.resolve({ ok: true as const, value: true as never })
+      return Promise.resolve(Result.ok())
     } else {
-      return Promise.resolve({
-        ok: false as const,
-        error: new Error('Day not found'),
-      })
+      return Promise.resolve(Result.fail(new Error('Day not found')))
     }
   }
 }

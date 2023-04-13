@@ -25,26 +25,26 @@ export class PlanUseCases {
   }
 
   public async createOrUpdatePlan(userId: string, plan?: Plan) {
-    const wasNewPlan = !plan?.id
+    const wasNewPlan = !plan
 
-    if (!plan?.id) {
+    if (!plan) {
       plan = createEmptyPlan()
     }
 
     const validatedPlan = validatePlan(plan)
 
-    if (!validatedPlan.ok) {
+    if (validatedPlan.isFailure) {
       return validatedPlan
     }
 
     const newPlan = this.planRepo.createOrUpdatePlan(
       userId,
-      validatedPlan.value
+      validatedPlan.getValue()
     )
 
     if (wasNewPlan) {
       await this.userRepo.updateUser(userId, {
-        defaultPlanId: validatedPlan.value.id,
+        defaultPlanId: validatedPlan.getValue().id,
       })
     }
 

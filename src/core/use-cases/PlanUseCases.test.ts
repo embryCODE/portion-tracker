@@ -16,14 +16,14 @@ describe('PlanUseCases', () => {
     it('should create a plan if not found', async () => {
       const plan = await testContainer.createOrUpdatePlan('1', testPlan)
 
-      expect(plan).toStrictEqual({ ok: true, value: testPlan })
+      expect(plan.getValue()).toStrictEqual(testPlan)
     })
 
     it('should create an empty plan if a plan is not passed', async () => {
       const plan = await testContainer.createOrUpdatePlan('1')
 
       // uuid is mocked above
-      expect(plan).toStrictEqual({ ok: true, value: createEmptyPlan() })
+      expect(plan.getValue()).toStrictEqual(createEmptyPlan())
     })
 
     it('should update a plan if found', async () => {
@@ -36,9 +36,9 @@ describe('PlanUseCases', () => {
         name: 'New name',
       })
 
-      expect(updatedPlan).toStrictEqual({
-        ok: true,
-        value: { ...testPlan, name: 'New name' },
+      expect(updatedPlan.getValue()).toStrictEqual({
+        ...testPlan,
+        name: 'New name',
       })
     })
   })

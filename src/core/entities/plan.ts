@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 
-import { Result } from '@/src/core/shared/typeUtils'
+import { Result } from '@/src/core/shared/result'
 
 export interface Plan {
   id: string
@@ -34,10 +34,10 @@ export function validatePlan(plan: any): Result<Plan> {
     typeof plan.fat !== 'number' ||
     typeof plan.meals !== 'number'
   ) {
-    return { ok: false, error: new Error('Invalid plan') }
+    return Result.fail(new Error('Invalid plan'))
   }
 
-  return { ok: true, value: plan as Plan }
+  return Result.ok<Plan>(plan)
 }
 
 export function createEmptyPlan() {

@@ -19,10 +19,9 @@ describe('DayUseCases', () => {
       const date = new Date()
       const day = await testContainer.getDayByDate('123', date.toISOString())
 
-      expect(day).toStrictEqual({
-        ok: false,
-        error: new Error('Cannot create a new day without a default plan'),
-      })
+      expect(day.getError()).toStrictEqual(
+        new Error('Cannot create a new day without a default plan')
+      )
     })
 
     it('should create a day if the day does not exist and there are plans', async () => {
@@ -34,10 +33,7 @@ describe('DayUseCases', () => {
       testContainer.createOrUpdatePlan('123', testPlan)
       const day = await testContainer.getDayByDate('123', date.toISOString())
 
-      expect(day).toStrictEqual({
-        ok: true,
-        value: createEmptyDay(date, testPlan),
-      })
+      expect(day.getValue()).toStrictEqual(createEmptyDay(date, testPlan))
     })
   })
 
@@ -45,7 +41,7 @@ describe('DayUseCases', () => {
     it('should create a day if not found', async () => {
       const day = await testContainer.createOrUpdateDay('1', testDay)
 
-      expect(day).toStrictEqual({ ok: true, value: testDay })
+      expect(day.getValue()).toStrictEqual(testDay)
     })
 
     it('should update a day if found', async () => {
@@ -58,9 +54,9 @@ describe('DayUseCases', () => {
         notes: 'New notes',
       })
 
-      expect(updatedDay).toStrictEqual({
-        ok: true,
-        value: { ...testDay, notes: 'New notes' },
+      expect(updatedDay.getValue()).toStrictEqual({
+        ...testDay,
+        notes: 'New notes',
       })
     })
   })

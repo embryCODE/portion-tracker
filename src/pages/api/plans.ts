@@ -20,32 +20,32 @@ export default async function handler(
     if (req.method === 'GET') {
       const plans = await container.getAllPlansByUserId(token.sub)
 
-      if (!plans.ok) {
-        res.status(400).json(plans.error.message)
+      if (plans.isFailure) {
+        res.status(400).json(plans.getError().message)
         return
       }
 
-      res.json(plans.value)
+      res.json(plans.getValue())
       return
     }
 
     if (req.method === 'POST') {
       const plan = await container.createOrUpdatePlan(token.sub, req.body)
 
-      if (!plan?.ok) {
-        res.status(400).json(plan?.error.message ?? 'Unknown error')
+      if (plan.isFailure) {
+        res.status(400).json(plan?.getError().message)
         return
       }
 
-      res.json(plan.value)
+      res.json(plan.getValue())
       return
     }
 
     if (req.method === 'DELETE') {
       const plans = await container.deletePlan(req.body.id)
 
-      if (!plans.ok) {
-        res.status(400).json(plans.error.message)
+      if (plans.isFailure) {
+        res.status(400).json(plans.getError().message)
         return
       }
 

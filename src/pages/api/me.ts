@@ -20,24 +20,24 @@ export default async function handler(
     if (req.method === 'GET') {
       const user = await container.getUserById(token.sub)
 
-      if (!user.ok) {
-        res.status(400).json(user.error.message)
+      if (user.isFailure) {
+        res.status(400).json(user.getError().message)
         return
       }
 
-      res.json(user.value)
+      res.json(user.getValue())
       return
     }
 
     if (req.method === 'PUT') {
       const user = await container.updateUser(token.sub, req.body)
 
-      if (!user.ok) {
-        res.status(400).json(user.error.message)
+      if (user.isFailure) {
+        res.status(400).json(user.getError().message)
         return
       }
 
-      res.json(user.value)
+      res.json(user.getValue())
       return
     }
 

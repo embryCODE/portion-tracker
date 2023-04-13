@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 
 import { Plan } from '@/src/core/entities/plan'
-import { Result } from '@/src/core/shared/typeUtils'
+import { Result } from '@/src/core/shared/result'
 
 export interface Day {
   id: string
@@ -33,10 +33,10 @@ export function validateDay(day: any): Result<Day> {
     typeof day.fat !== 'number' ||
     !day.plan
   ) {
-    return { ok: false, error: new Error('Invalid day') }
+    return Result.fail(new Error('Invalid day'))
   }
 
-  return { ok: true, value: day as Day }
+  return Result.ok<Day>(day)
 }
 
 export function createEmptyDay(date: Date, plan: Plan) {

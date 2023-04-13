@@ -23,32 +23,32 @@ export default async function handler(
         req.query.date as string
       )
 
-      if (!days.ok) {
-        res.status(400).json(days.error.message)
+      if (days.isFailure) {
+        res.status(400).json(days.getError().message)
         return
       }
 
-      res.json(days.value)
+      res.json(days.getValue())
       return
     }
 
     if (req.method === 'POST') {
       const days = await container.createOrUpdateDay(token.sub, req.body)
 
-      if (!days.ok) {
-        res.status(400).json(days.error.message)
+      if (days.isFailure) {
+        res.status(400).json(days.getError().message)
         return
       }
 
-      res.json(days.value)
+      res.json(days.getValue())
       return
     }
 
     if (req.method === 'DELETE') {
       const days = await container.deleteDay(req.body.id)
 
-      if (!days.ok) {
-        res.status(400).json(days.error.message)
+      if (days.isFailure) {
+        res.status(400).json(days.getError().message)
         return
       }
 

@@ -11,12 +11,12 @@ describe('UserUseCases', () => {
   describe('getUserById', () => {
     it('should return a user if found', async () => {
       const user = await testContainer.getUserById('123')
-      expect(user).toEqual({ ok: true, value: testUser })
+      expect(user.getValue()).toEqual(testUser)
     })
 
     it('should return null if user not found', async () => {
       const user = await testContainer.getUserById('456')
-      expect(user).toStrictEqual({ ok: true, value: null })
+      expect(user.getValue()).toStrictEqual(null)
     })
   })
 
@@ -27,10 +27,7 @@ describe('UserUseCases', () => {
         name: null as unknown as string,
       })
 
-      expect(user).toEqual({
-        ok: false,
-        error: new Error('Name must be a string'),
-      })
+      expect(user.getError()).toEqual(new Error('Name must be a string'))
     })
 
     it('should return an error if name is too short', async () => {
@@ -39,10 +36,9 @@ describe('UserUseCases', () => {
         name: '',
       })
 
-      expect(user).toEqual({
-        ok: false,
-        error: new Error('Name must be at least 1 character'),
-      })
+      expect(user.getError()).toEqual(
+        new Error('Name must be at least 1 character')
+      )
     })
 
     it('should return an error if name is too long', async () => {
@@ -51,10 +47,9 @@ describe('UserUseCases', () => {
         name: '123456789012345678901234567890123456789012345678901', // 51 characters
       })
 
-      expect(user).toEqual({
-        ok: false,
-        error: new Error('Name must be at most 50 characters'),
-      })
+      expect(user.getError()).toEqual(
+        new Error('Name must be at most 50 characters')
+      )
     })
 
     it('should update the user name and return the updated user', async () => {
@@ -62,10 +57,7 @@ describe('UserUseCases', () => {
         ...testUser,
         name: 'Mr. Furious',
       })
-      expect(user).toEqual({
-        ok: true,
-        value: { ...testUser, name: 'Mr. Furious' },
-      })
+      expect(user.getValue()).toEqual({ ...testUser, name: 'Mr. Furious' })
     })
 
     it('should return null if user not found', async () => {
@@ -73,7 +65,7 @@ describe('UserUseCases', () => {
         ...testUser,
         name: 'Mr. Furious',
       })
-      expect(user).toStrictEqual({ ok: true, value: null })
+      expect(user.getValue()).toStrictEqual(null)
     })
   })
 })

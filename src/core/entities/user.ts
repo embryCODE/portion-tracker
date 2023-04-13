@@ -1,4 +1,4 @@
-import { Result } from '@/src/core/shared/typeUtils'
+import { Result } from '@/src/core/shared/result'
 
 export interface User {
   name: string | null
@@ -14,16 +14,16 @@ export interface UserRepo {
 
 export function validateUserName(name: unknown): Result<string> {
   if (typeof name !== 'string') {
-    return { ok: false, error: new Error('Name must be a string') }
+    return Result.fail(new Error('Name must be a string'))
   }
 
   if (name.length < 1) {
-    return { ok: false, error: new Error('Name must be at least 1 character') }
+    return Result.fail(new Error('Name must be at least 1 character'))
   }
 
   if (name.length > 50) {
-    return { ok: false, error: new Error('Name must be at most 50 characters') }
+    return Result.fail(new Error('Name must be at most 50 characters'))
   }
 
-  return { ok: true, value: name }
+  return Result.ok(name)
 }

@@ -11,7 +11,7 @@ export class UserUseCases {
   public updateUser(userId: string, user: User) {
     const validatedUserName = validateUserName(user.name)
 
-    if (!validatedUserName.ok) {
+    if (validatedUserName.isFailure) {
       return validatedUserName
     }
 

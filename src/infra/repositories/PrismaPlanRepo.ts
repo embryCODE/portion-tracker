@@ -1,4 +1,5 @@
 import { Plan, PlanRepo } from '@/src/core/entities/plan'
+import { Result } from '@/src/core/shared/result'
 import prisma from '@/src/infra/prisma'
 
 export class PrismaPlanRepo implements PlanRepo {
@@ -23,12 +24,12 @@ export class PrismaPlanRepo implements PlanRepo {
         },
       })
 
-      return { ok: true as const, value: plans }
+      return Result.ok(plans)
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }
@@ -50,12 +51,12 @@ export class PrismaPlanRepo implements PlanRepo {
         },
       })
 
-      return { ok: true as const, value: plan }
+      return Result.ok(plan)
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }
@@ -99,12 +100,12 @@ export class PrismaPlanRepo implements PlanRepo {
         },
       })
 
-      return { ok: true as const, value: newPlan }
+      return Result.ok(newPlan)
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }
@@ -117,12 +118,12 @@ export class PrismaPlanRepo implements PlanRepo {
         },
       })
 
-      return { ok: true as const, value: true as never }
+      return Result.ok()
     } catch (e) {
       if (e instanceof Error) {
-        return { ok: false as const, error: e }
+        return Result.fail(e)
       } else {
-        return { ok: false as const, error: new Error('Unknown error') }
+        return Result.fail(new Error('Unknown error'))
       }
     }
   }

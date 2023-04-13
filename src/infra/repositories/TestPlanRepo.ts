@@ -1,4 +1,5 @@
 import { Plan, PlanRepo } from '@/src/core/entities/plan'
+import { Result } from '@/src/core/shared/result'
 
 export const testPlan: Plan = {
   id: '123',
@@ -17,17 +18,16 @@ const plans: Plan[] = []
 export class TestPlanRepo implements PlanRepo {
   public getAllPlansByUserId = (userId: string) => {
     if (userId === '123') {
-      return Promise.resolve({ ok: true as const, value: plans })
+      return Promise.resolve(Result.ok(plans))
     } else {
-      return Promise.resolve({ ok: true as const, value: [] })
+      return Promise.resolve(Result.ok([]))
     }
   }
 
   public getPlanById = (id: string) => {
-    return Promise.resolve({
-      ok: true as const,
-      value: plans.find((plan) => plan.id === id) ?? null,
-    })
+    return Promise.resolve(
+      Result.ok(plans.find((plan) => plan.id === id) ?? null)
+    )
   }
 
   public createOrUpdatePlan = (userId: string, plan: Plan) => {
@@ -36,10 +36,10 @@ export class TestPlanRepo implements PlanRepo {
     if (foundPlan) {
       const index = plans.indexOf(foundPlan)
       plans[index] = plan
-      return Promise.resolve({ ok: true as const, value: plan })
+      return Promise.resolve(Result.ok(plan))
     } else {
       plans.push(plan)
-      return Promise.resolve({ ok: true as const, value: plan })
+      return Promise.resolve(Result.ok(plan))
     }
   }
 
@@ -49,12 +49,9 @@ export class TestPlanRepo implements PlanRepo {
     if (foundPlan) {
       const index = plans.indexOf(foundPlan)
       plans.splice(index, 1)
-      return Promise.resolve({ ok: true as const, value: true as never })
+      return Promise.resolve(Result.ok())
     } else {
-      return Promise.resolve({
-        ok: false as const,
-        error: new Error('Plan not found'),
-      })
+      return Promise.resolve(Result.fail(new Error('Plan not found')))
     }
   }
 }
