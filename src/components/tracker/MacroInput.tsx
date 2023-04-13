@@ -5,11 +5,13 @@ export default function MacroInput({
   value,
   onChange,
   desiredValue,
+  showNumber = false,
 }: {
   label: string
   onChange: (value: number) => void
   value: number
   desiredValue: number
+  showNumber?: boolean
 }) {
   const handleClick = (buttonNumber: number, fillPercentage: number) => () => {
     // If I click on a filled circle, fill half of it
@@ -43,6 +45,7 @@ export default function MacroInput({
         )}
       >
         {label}
+        {showNumber && ` (${value})`}
       </label>
 
       <input

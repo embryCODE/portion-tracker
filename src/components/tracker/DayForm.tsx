@@ -65,13 +65,17 @@ export default function DayForm({
         >
           {plans.map((planOption) => (
             <option key={planOption.id} value={planOption.id}>
-              {planOption.name ?? planOption.id}
+              {planOption.name || planOption.id}
             </option>
           ))}
         </select>
       </div>
 
-      <div className={'tw-mt-4 tw-grid md:tw-grid-cols-4 tw-gap-4'}>
+      <div
+        className={
+          'tw-mt-4 tw-grid md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4'
+        }
+      >
         <MacroInput
           label={'Protein'}
           onChange={handleChange<number>('protein')}

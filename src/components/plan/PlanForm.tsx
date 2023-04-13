@@ -1,5 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react'
 
+import MacroInput from '@/src/components/tracker/MacroInput'
+
 import { Plan as PlanType } from '../../core/entities/plan'
 
 interface PlanProps {
@@ -64,97 +66,69 @@ export default function PlanForm({
     meals !== plan.meals
 
   return (
-    <form className={'tw-border tw-rounded tw-p-2'} onSubmit={handleSubmit}>
-      <div className={'tw-mb-2 tw-flex tw-items-center tw-space-x-2'}>
-        {isDefault ? (
-          <span className={'tw-font-bold tw-text-carbs'}>Default</span>
-        ) : (
-          <button
+    <form
+      className={'tw-border tw-rounded tw-p-2 tw-shadow'}
+      onSubmit={handleSubmit}
+    >
+      <div className={'tw-flex tw-flex-wrap'}>
+        <div className={'tw-mr-4 tw-mb-2'}>
+          <label htmlFor={'name'}>Name</label>
+          <input
+            id={'name'}
             className={
-              'tw-rounded tw-bg-carbs tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-mb-2'
+              'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-block'
             }
-            type="button"
-            onClick={onMakeDefault}
-          >
-            Make default
-          </button>
-        )}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <label htmlFor={'meals'}>Meals per day</label>
+          <input
+            id={'meals'}
+            type={'number'}
+            className={
+              'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-w-16 tw-block'
+            }
+            value={meals}
+            onChange={(e) => setMeals(parseInt(e.target.value))}
+          />
+        </div>
       </div>
 
-      <div>
-        <label htmlFor={'name'}>Name</label>
-        <input
-          id={'name'}
-          className={
-            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-          }
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-
-      <div className={'tw-inline-block tw-mt-4'}>
-        <label htmlFor={'protein'}>Protein</label>
-        <input
-          id={'protein'}
-          type={'number'}
-          className={
-            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-          }
+      <div
+        className={
+          'tw-mt-4 tw-grid md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4'
+        }
+      >
+        <MacroInput
+          label={'Protein'}
+          onChange={setProtein}
           value={protein}
-          onChange={(e) => setProtein(parseInt(e.target.value))}
+          desiredValue={protein + 1}
+          showNumber={true}
         />
-      </div>
-
-      <div className={'tw-inline-block'}>
-        <label htmlFor={'vegetables'}>Vegetables</label>
-        <input
-          id={'vegetables'}
-          type={'number'}
-          className={
-            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-          }
+        <MacroInput
+          label={'Vegetables'}
+          onChange={setVegetables}
           value={vegetables}
-          onChange={(e) => setVegetables(parseInt(e.target.value))}
+          desiredValue={vegetables + 1}
+          showNumber={true}
         />
-      </div>
-
-      <div className={'tw-inline-block'}>
-        <label htmlFor={'carbs'}>Carbs</label>
-        <input
-          id={'carbs'}
-          type={'number'}
-          className={
-            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-          }
+        <MacroInput
+          label={'Carbs'}
+          onChange={setCarbs}
           value={carbs}
-          onChange={(e) => setCarbs(parseInt(e.target.value))}
+          desiredValue={carbs + 1}
+          showNumber={true}
         />
-      </div>
-
-      <div className={'tw-inline-block'}>
-        <label htmlFor={'fat'}>Fat</label>
-        <input
-          id={'fat'}
-          type={'number'}
-          className={
-            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-          }
+        <MacroInput
+          label={'Fat'}
+          onChange={setFat}
           value={fat}
-          onChange={(e) => setFat(parseInt(e.target.value))}
-        />
-      </div>
-
-      <div className={'tw-mt-4'}>
-        <label htmlFor={'meals'}>Meals per day</label>
-        <input
-          id={'meals'}
-          type={'number'}
-          className={
-            'tw-rounded tw-border tw-border-gray-300 tw-px-2 tw-py-0.5 tw-mr-2 tw-block'
-          }
-          value={meals}
-          onChange={(e) => setMeals(parseInt(e.target.value))}
+          desiredValue={fat + 1}
+          showNumber={true}
         />
       </div>
 
@@ -170,11 +144,23 @@ export default function PlanForm({
         />
       </div>
 
-      <div className={'tw-flex tw-mt-4'}>
+      <div className={'tw-flex tw-mt-4 tw-items-center'}>
+        {isDefault ? (
+          <span className={'tw-font-bold tw-text-carbs tw-mr-4'}>Default</span>
+        ) : (
+          <button
+            className={
+              'tw-rounded tw-bg-carbs tw-text-white tw-px-2 tw-py-0.5 tw-mr-4'
+            }
+            type="button"
+            onClick={onMakeDefault}
+          >
+            Make default
+          </button>
+        )}
+
         <button
-          className={
-            'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1'
-          }
+          className={'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5'}
           type="button"
           onClick={handleDelete}
         >
@@ -184,7 +170,7 @@ export default function PlanForm({
         {hasChanged && (
           <button
             className={
-              'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-ml-2'
+              'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-ml-4'
             }
             type="submit"
           >
