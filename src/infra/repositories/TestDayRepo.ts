@@ -13,10 +13,9 @@ export const testDay: Day = {
   plan: testPlan,
 }
 
-// In-memory database for testing
-const days: Day[] = []
-
 export class TestDayRepo implements DayRepo {
+  days: Day[] = []
+
   public getDayByDate = (id: string, date: Date) => {
     const startOfDate = new Date(
       date.getFullYear(),
@@ -26,30 +25,31 @@ export class TestDayRepo implements DayRepo {
 
     return Promise.resolve(
       Result.ok(
-        days.find((day) => day.date.getDate() === startOfDate.getDate()) ?? null
+        this.days.find((day) => day.date.getDate() === startOfDate.getDate()) ??
+          null
       )
     )
   }
 
   public createOrUpdateDay = (userId: string, day: Day) => {
-    const foundDay = days.find((day) => day.id === day.id)
+    const foundDay = this.days.find((day) => day.id === day.id)
 
     if (foundDay) {
-      const index = days.indexOf(foundDay)
-      days[index] = day
+      const index = this.days.indexOf(foundDay)
+      this.days[index] = day
       return Promise.resolve(Result.ok(day))
     } else {
-      days.push(day)
+      this.days.push(day)
       return Promise.resolve(Result.ok(day))
     }
   }
 
   public deleteDay = (id: string) => {
-    const foundDay = days.find((day) => day.id === id)
+    const foundDay = this.days.find((day) => day.id === id)
 
     if (foundDay) {
-      const index = days.indexOf(foundDay)
-      days.splice(index, 1)
+      const index = this.days.indexOf(foundDay)
+      this.days.splice(index, 1)
       return Promise.resolve(Result.ok())
     } else {
       return Promise.resolve(Result.fail(new Error('Day not found')))

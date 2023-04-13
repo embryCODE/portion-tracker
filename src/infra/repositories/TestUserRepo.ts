@@ -1,7 +1,7 @@
 import { User, UserRepo } from '@/src/core/entities/user'
 import { Result } from '@/src/core/shared/result'
 
-export let testUser: User = {
+export const testUser: User = {
   name: 'Testy McTesterson',
   email: 'testymctesterson@example.com',
   image: null,
@@ -9,9 +9,11 @@ export let testUser: User = {
 }
 
 export class TestUserRepo implements UserRepo {
+  testUser: User = testUser
+
   public getUserById = (id: string) => {
     if (id === '123') {
-      return Promise.resolve(Result.ok(testUser))
+      return Promise.resolve(Result.ok(this.testUser))
     } else {
       return Promise.resolve(Result.ok(null))
     }
@@ -19,9 +21,9 @@ export class TestUserRepo implements UserRepo {
 
   public updateUser = (id: string, user: User) => {
     if (id === '123') {
-      testUser = user
+      this.testUser = user
 
-      return Promise.resolve(Result.ok(testUser))
+      return Promise.resolve(Result.ok(this.testUser))
     } else {
       return Promise.resolve(Result.ok(null))
     }

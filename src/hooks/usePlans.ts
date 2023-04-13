@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { Plan } from '@/src/core/entities/plan'
 import { request } from '@/src/infra/net'
+import { useAuth } from '@/src/providers/AuthProvider'
 import { useUiState } from '@/src/providers/UiStateProvider'
 
 export default function usePlans() {
+  const { updateFromServer } = useAuth()
   const [plans, setPlans] = useState<Plan[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -44,10 +46,12 @@ export default function usePlans() {
       } catch (e) {
         console.error(e)
       } finally {
-        void getPlans()
+        await getPlans()
+        // Default plan may have changed, so pull the latest user data
+        await updateFromServer()
       }
     },
-    [getPlans]
+    [getPlans, updateFromServer]
   )
 
   const deletePlan = useCallback(
@@ -63,10 +67,12 @@ export default function usePlans() {
       } catch (e) {
         console.error(e)
       } finally {
-        void getPlans()
+        await getPlans()
+        // Default plan may have changed, so pull the latest user data
+        await updateFromServer()
       }
     },
-    [getPlans]
+    [getPlans, updateFromServer]
   )
 
   return {

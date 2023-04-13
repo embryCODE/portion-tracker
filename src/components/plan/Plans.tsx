@@ -4,15 +4,11 @@ import usePlans from '@/src/hooks/usePlans'
 import { useAuth } from '@/src/providers/AuthProvider'
 
 export default function Plans() {
-  const { user, updateUser, updateFromServer } = useAuth()
+  const { user, updateUser } = useAuth()
   const { plans, createOrUpdatePlan, deletePlan } = usePlans()
 
   const handleNew = async () => {
     await createOrUpdatePlan()
-
-    // If this was a new plan, the user has had it set as their defaul plan. We
-    // need to update the user from the server to reflect this.
-    void updateFromServer()
   }
 
   const handleMakeDefault = (plan: Plan) => async () => {

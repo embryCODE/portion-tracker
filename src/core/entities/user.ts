@@ -12,7 +12,7 @@ export interface UserRepo {
   updateUser(id: string, user: Partial<User>): Promise<Result<User | null>>
 }
 
-export function validateUserName(name: unknown): Result<string> {
+export function validateUserName(name: unknown) {
   if (typeof name !== 'string') {
     return Result.fail(new Error('Name must be a string'))
   }

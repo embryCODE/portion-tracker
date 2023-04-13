@@ -12,13 +12,12 @@ export const testPlan: Plan = {
   meals: 1,
 }
 
-// In-memory database for testing
-const plans: Plan[] = []
-
 export class TestPlanRepo implements PlanRepo {
+  plans: Plan[] = []
+
   public getAllPlansByUserId = (userId: string) => {
     if (userId === '123') {
-      return Promise.resolve(Result.ok(plans))
+      return Promise.resolve(Result.ok(this.plans))
     } else {
       return Promise.resolve(Result.ok([]))
     }
@@ -26,29 +25,29 @@ export class TestPlanRepo implements PlanRepo {
 
   public getPlanById = (id: string) => {
     return Promise.resolve(
-      Result.ok(plans.find((plan) => plan.id === id) ?? null)
+      Result.ok(this.plans.find((plan) => plan.id === id) ?? null)
     )
   }
 
   public createOrUpdatePlan = (userId: string, plan: Plan) => {
-    const foundPlan = plans.find((plan) => plan.id === plan.id)
+    const foundPlan = this.plans.find((plan) => plan.id === plan.id)
 
     if (foundPlan) {
-      const index = plans.indexOf(foundPlan)
-      plans[index] = plan
+      const index = this.plans.indexOf(foundPlan)
+      this.plans[index] = plan
       return Promise.resolve(Result.ok(plan))
     } else {
-      plans.push(plan)
+      this.plans.push(plan)
       return Promise.resolve(Result.ok(plan))
     }
   }
 
   public deletePlan = (id: string) => {
-    const foundPlan = plans.find((plan) => plan.id === id)
+    const foundPlan = this.plans.find((plan) => plan.id === id)
 
     if (foundPlan) {
-      const index = plans.indexOf(foundPlan)
-      plans.splice(index, 1)
+      const index = this.plans.indexOf(foundPlan)
+      this.plans.splice(index, 1)
       return Promise.resolve(Result.ok())
     } else {
       return Promise.resolve(Result.fail(new Error('Plan not found')))

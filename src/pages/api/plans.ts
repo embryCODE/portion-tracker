@@ -42,7 +42,7 @@ export default async function handler(
     }
 
     if (req.method === 'DELETE') {
-      const plans = await container.deletePlan(req.body.id)
+      const plans = await container.deletePlan(token.sub, req.body.id)
 
       if (plans.isFailure) {
         res.status(400).json(plans.getError().message)

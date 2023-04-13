@@ -1,4 +1,5 @@
 import { User, UserRepo, validateUserName } from '@/src/core/entities/user'
+import { Result } from '@/src/core/shared/result'
 
 export class UserUseCases {
   userRepo: UserRepo
@@ -12,7 +13,7 @@ export class UserUseCases {
     const validatedUserName = validateUserName(user.name)
 
     if (validatedUserName.isFailure) {
-      return validatedUserName
+      return Result.fail(validatedUserName.getError())
     }
 
     return this.userRepo.updateUser(userId, user)
