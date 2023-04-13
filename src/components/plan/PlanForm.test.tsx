@@ -18,8 +18,9 @@ describe('PlanForm', () => {
       <PlanForm
         plan={testPlan}
         onSubmit={handleSubmit}
-        isLoading={false}
         onDelete={handleDelete}
+        isDefault={true}
+        onMakeDefault={jest.fn()}
       />
     )
     expect(getByLabelText('Name'))
@@ -32,8 +33,9 @@ describe('PlanForm', () => {
       <PlanForm
         plan={testPlan}
         onSubmit={handleSubmit}
-        isLoading={false}
         onDelete={handleDelete}
+        isDefault={true}
+        onMakeDefault={jest.fn()}
       />
     )
 
@@ -53,8 +55,9 @@ describe('PlanForm', () => {
       <PlanForm
         plan={testPlan}
         onSubmit={handleSubmit}
-        isLoading={false}
         onDelete={handleDelete}
+        isDefault={true}
+        onMakeDefault={jest.fn()}
       />
     )
 
