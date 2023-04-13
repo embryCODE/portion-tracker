@@ -1,6 +1,6 @@
 import Container from '@/src/components/layout/Container'
 import MyLink from '@/src/components/shared/MyLink'
-import { useAuth } from '@/src/hooks/AuthProvider'
+import { useAuth } from '@/src/providers/AuthProvider'
 
 export function Nav() {
   const { user } = useAuth()

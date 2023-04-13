@@ -1,19 +1,8 @@
 import Container from '@/src/components/layout/Container'
 import Plans from '@/src/components/plan/Plans'
 import UserForm from '@/src/components/user/UserForm'
-import { useAuth } from '@/src/hooks/AuthProvider'
 
 export default function Settings() {
-  const { isLoading } = useAuth()
-
-  if (isLoading) {
-    return (
-      <Container>
-        <p>Loading...</p>
-      </Container>
-    )
-  }
-
   return (
     <Container>
       <div className={'tw-prose'}>

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { FaArrowLeft, FaArrowRight, FaSave } from 'react-icons/fa'
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 
 import DayForm from '@/src/components/tracker/DayForm'
 import useDays from '@/src/hooks/useDays'
@@ -7,10 +7,10 @@ import useDebouncedCallback from '@/src/hooks/useDebouncedCallback'
 import usePlans from '@/src/hooks/usePlans'
 
 export default function Tracker() {
-  const { day, setDate, createOrUpdateDay, isLoading } = useDays()
+  const { day, setDate, createOrUpdateDay } = useDays()
   const debouncedCreateOrUpdateDay = useDebouncedCallback(
     createOrUpdateDay,
-    500
+    2000
   )
 
   const { plans } = usePlans()
@@ -18,6 +18,8 @@ export default function Tracker() {
   const dayJs = dayjs(day?.date)
   const prevDay = () => setDate(dayJs.subtract(1, 'day').toDate())
   const nextDay = () => setDate(dayJs.add(1, 'day').toDate())
+
+  if (!day || !plans) return null
 
   return (
     <div>
@@ -79,8 +81,6 @@ export default function Tracker() {
         <button className={'tw-ml-2'} onClick={nextDay} title={'Next day'}>
           <FaArrowRight />
         </button>
-
-        {isLoading && <FaSave className={'tw-ml-2'} />}
       </div>
 
       <section className={'tw-mt-4'}>

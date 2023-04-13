@@ -25,6 +25,9 @@ export class PlanUseCases {
   }
 
   public async createOrUpdatePlan(userId: string, plan?: Plan) {
+    // Checking ID here because an empty object could be sent in
+    plan = plan?.id ? plan : undefined
+
     const wasNewPlan = !plan
 
     if (!plan) {
@@ -37,15 +40,19 @@ export class PlanUseCases {
       return validatedPlan
     }
 
-    const newPlan = this.planRepo.createOrUpdatePlan(
+    const newPlan = await this.planRepo.createOrUpdatePlan(
       userId,
       validatedPlan.getValue()
     )
 
     if (wasNewPlan) {
-      await this.userRepo.updateUser(userId, {
-        defaultPlanId: validatedPlan.getValue().id,
-      })
+      const newPlanId = newPlan.getValue()?.id
+
+      if (newPlanId) {
+        await this.userRepo.updateUser(userId, {
+          defaultPlanId: newPlanId,
+        })
+      }
     }
 
     return newPlan

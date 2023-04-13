@@ -1,12 +1,14 @@
+import { GetServerSideProps } from 'next'
+import { getToken } from 'next-auth/jwt'
+
 import Container from '@/src/components/layout/Container'
 import MyLink from '@/src/components/shared/MyLink'
-import { useAuth } from '@/src/hooks/AuthProvider'
+import { container } from '@/src/container'
+import { User } from '@/src/core/entities/user'
 
-export default function Welcome() {
-  const { user, isLoading } = useAuth()
+type WelcomeProps = { user: User | null }
 
-  if (isLoading) return
-
+export default function Welcome({ user }: WelcomeProps) {
   return (
     <Container isProse={true}>
       <h1>Portion Tracker</h1>
@@ -30,4 +32,25 @@ export default function Welcome() {
       )}
     </Container>
   )
+}
+
+export const getServerSideProps: GetServerSideProps<WelcomeProps> = async (
+  context
+) => {
+  const token = await getToken({ req: context.req, secret: process.env.SECRET })
+  let user: User | null = null
+
+  if (token?.sub) {
+    const userResult = await container.getUserById(token?.sub)
+
+    if (userResult.isSuccess) {
+      user = userResult.getValue()
+    }
+  }
+
+  return {
+    props: {
+      user,
+    },
+  }
 }

@@ -10,6 +10,7 @@ import {
 
 import { User } from '@/src/core/entities/user'
 import { request } from '@/src/infra/net'
+import { useUiState } from '@/src/providers/UiStateProvider'
 
 export interface AuthContext {
   user: User | null
@@ -29,10 +30,18 @@ const AuthContext = createContext<AuthContext>({
 })
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { status } = useSession()
   const [user, setUser] = useState<User | null>(null)
   const [isUpdatingFromServer, setIsUpdatingFromServer] = useState(true)
   const [isUpdatingUser, setIsUpdatingUser] = useState(false)
+
+  const { status } = useSession()
+  const { setShouldShowLoadingIndicator } = useUiState()
+
+  const isLoading = isUpdatingFromServer || isUpdatingUser
+
+  useEffect(() => {
+    setShouldShowLoadingIndicator(isLoading)
+  }, [isLoading, setShouldShowLoadingIndicator])
 
   const updateFromServer = useCallback(async () => {
     setIsUpdatingFromServer(true)
@@ -83,7 +92,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     [updateFromServer]
   )
 
-  const isLoading = isUpdatingFromServer || isUpdatingUser
   const value = {
     user,
     updateUser,

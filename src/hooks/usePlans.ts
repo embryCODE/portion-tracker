@@ -2,10 +2,17 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { Plan } from '@/src/core/entities/plan'
 import { request } from '@/src/infra/net'
+import { useUiState } from '@/src/providers/UiStateProvider'
 
 export default function usePlans() {
   const [plans, setPlans] = useState<Plan[]>([])
   const [isLoading, setIsLoading] = useState(false)
+
+  const { setShouldShowLoadingIndicator } = useUiState()
+
+  useEffect(() => {
+    setShouldShowLoadingIndicator(isLoading)
+  }, [isLoading, setShouldShowLoadingIndicator])
 
   const getPlans = useCallback(async () => {
     setIsLoading(true)

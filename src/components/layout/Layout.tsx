@@ -1,14 +1,18 @@
 import Head from 'next/head'
 import { ReactNode } from 'react'
+import { FaSave } from 'react-icons/fa'
 
 import { Footer } from '@/src/components/layout/Footer'
 import { Nav } from '@/src/components/layout/Nav'
+import { useUiState } from '@/src/providers/UiStateProvider'
 
 interface LayoutProps {
   children: ReactNode
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const { shouldShowLoadingIndicator } = useUiState()
+
   return (
     <>
       <Head>
@@ -21,6 +25,9 @@ export default function Layout({ children }: LayoutProps) {
       <div className={'tw-absolute tw-inset-0 tw-h-full tw-flex tw-flex-col'}>
         <Nav />
         <main className={'tw-flex-1'}>{children}</main>
+        {shouldShowLoadingIndicator && (
+          <FaSave className={'tw-fixed tw-left-4 tw-bottom-4'} size={20} />
+        )}
         <Footer />
       </div>
     </>

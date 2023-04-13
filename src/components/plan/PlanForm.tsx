@@ -1,5 +1,4 @@
 import { FormEvent, useEffect, useState } from 'react'
-import { FaSave } from 'react-icons/fa'
 
 import { Plan as PlanType } from '../../core/entities/plan'
 
@@ -8,14 +7,12 @@ interface PlanProps {
   onSubmit: (plan: PlanType) => void
   onDelete: (plan: PlanType) => void
   onMakeDefault: () => void
-  isLoading: boolean
   isDefault: boolean
 }
 
 export default function PlanForm({
   plan,
   onSubmit,
-  isLoading,
   onDelete,
   isDefault,
   onMakeDefault,
@@ -82,8 +79,6 @@ export default function PlanForm({
             Make default
           </button>
         )}
-
-        {isLoading && <FaSave />}
       </div>
 
       <div>
@@ -186,7 +181,7 @@ export default function PlanForm({
           Delete
         </button>
 
-        {!isLoading && hasChanged && (
+        {hasChanged && (
           <button
             className={
               'tw-rounded tw-bg-protein tw-text-white tw-px-2 tw-py-0.5 tw-mt-1 tw-ml-2'

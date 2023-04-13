@@ -2,11 +2,18 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { Day } from '@/src/core/entities/day'
 import { request } from '@/src/infra/net'
+import { useUiState } from '@/src/providers/UiStateProvider'
 
 export default function useDays() {
   const [date, setDate] = useState<Date>(new Date())
   const [day, setDay] = useState<Day>()
   const [isLoading, setIsLoading] = useState(false)
+
+  const { setShouldShowLoadingIndicator } = useUiState()
+
+  useEffect(() => {
+    setShouldShowLoadingIndicator(isLoading)
+  }, [isLoading, setShouldShowLoadingIndicator])
 
   const getDayByDate = useCallback(async () => {
     setIsLoading(true)
