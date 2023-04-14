@@ -17,7 +17,7 @@ describe('DayUseCases', () => {
   describe('getDayByDate', () => {
     it('should not create a day if there are no plans', async () => {
       const date = new Date()
-      const day = await testContainer.getDayByDate('123', date.toISOString())
+      const day = await testContainer.getDayByDate('123', date)
 
       expect(day.getError()).toStrictEqual(
         new Error('Cannot create a new day without a default plan')
@@ -31,7 +31,7 @@ describe('DayUseCases', () => {
         defaultPlanId: testPlan.id,
       })
       testContainer.createOrUpdatePlan('123', testPlan)
-      const day = await testContainer.getDayByDate('123', date.toISOString())
+      const day = await testContainer.getDayByDate('123', date)
 
       expect(day.getValue()).toStrictEqual(createEmptyDay(date, testPlan))
     })
