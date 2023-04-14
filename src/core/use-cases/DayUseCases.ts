@@ -28,13 +28,7 @@ export class DayUseCases {
     this.deleteDay = dayRepo.deleteDay
   }
 
-  public async getDayByDate(userId: string, iso: unknown) {
-    if (typeof iso !== 'string') {
-      return Result.fail(new Error('Invalid date'))
-    }
-
-    const date = new Date(iso)
-
+  public async getDayByDate(userId: string, date: Date) {
     const userResult = await this.userRepo.getUserById(userId)
 
     if (userResult.isFailure) {

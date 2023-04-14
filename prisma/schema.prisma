@@ -79,7 +79,7 @@ model Day {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   notes      String?
-  date       DateTime
+  date       DateTime @db.Date
   protein    Float
   vegetables Float
   carbs      Float

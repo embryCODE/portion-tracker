@@ -4,16 +4,7 @@ import prisma from '@/src/infra/prisma'
 
 export class PrismaDayRepo implements DayRepo {
   async getDayByDate(userId: string, date: Date) {
-    const startOfDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    )
-    const endOfDate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate() + 1
-    )
+    const nextDate = new Date(new Date(date).setDate(date.getDate() + 1))
 
     try {
       const day = await prisma.day.findFirst({
@@ -22,8 +13,8 @@ export class PrismaDayRepo implements DayRepo {
             { authorId: userId },
             {
               date: {
-                gte: startOfDate,
-                lt: endOfDate,
+                gte: date,
+                lt: nextDate,
               },
             },
           ],

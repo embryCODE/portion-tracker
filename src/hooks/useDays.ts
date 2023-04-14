@@ -18,8 +18,11 @@ export default function useDays() {
   const getDayByDate = useCallback(async () => {
     setIsLoading(true)
 
+    // Remove timezone info from date. Server expects date in UTC.
+    const dateString = buildDateString(date)
+
     try {
-      const day = await request<Day>(`/api/days?date=${date}`)
+      const day = await request<Day>(`/api/days?date=${dateString}`)
       setDay(day)
     } catch (e) {
       console.error(e)
@@ -77,4 +80,9 @@ export default function useDays() {
     setDate,
     createOrUpdateDay,
   }
+}
+
+function buildDateString(date: Date) {
+  // YYYY-MM-DD
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 }

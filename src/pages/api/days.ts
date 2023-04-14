@@ -10,6 +10,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const token = await getToken({ req, secret })
+  let date: Date
+
+  try {
+    // The date comes from the query as YYYY-MM-DD, so I construct a UTC date
+    // object server-side right here.
+    date = new Date(req.query.date as string)
+  } catch {
+    res.status(400).send('Invalid date')
+    return
+  }
 
   if (!token?.sub) {
     res.status(401).end()
@@ -18,10 +28,7 @@ export default async function handler(
 
   try {
     if (req.method === 'GET') {
-      const days = await container.getDayByDate(
-        token.sub,
-        req.query.date as string
-      )
+      const days = await container.getDayByDate(token.sub, date)
 
       if (days.isFailure) {
         res.status(400).json(days.getError().message)
@@ -33,14 +40,14 @@ export default async function handler(
     }
 
     if (req.method === 'POST') {
-      const days = await container.createOrUpdateDay(token.sub, req.body)
+      const day = await container.createOrUpdateDay(token.sub, req.body)
 
-      if (days.isFailure) {
-        res.status(400).json(days.getError().message)
+      if (day.isFailure) {
+        res.status(400).json(day.getError().message)
         return
       }
 
-      res.json(days.getValue())
+      res.json(day.getValue())
       return
     }
 

@@ -1,10 +1,13 @@
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 
 import DayForm from '@/src/components/tracker/DayForm'
 import useDays from '@/src/hooks/useDays'
 import useDebouncedCallback from '@/src/hooks/useDebouncedCallback'
 import usePlans from '@/src/hooks/usePlans'
+
+dayjs.extend(utc)
 
 export default function Tracker() {
   const { day, setDate, createOrUpdateDay } = useDays()
@@ -15,7 +18,11 @@ export default function Tracker() {
 
   const { plans } = usePlans()
 
-  const dayJs = dayjs(day?.date)
+  // In the API response, the date prop is a UTC ISO string. We want to strip
+  // off the timezone data and just show the date.
+  const dateFromDay = (day?.date as unknown as string)?.slice(0, 10)
+  const dayJs = dayjs(dateFromDay)
+
   const prevDay = () => setDate(dayJs.subtract(1, 'day').toDate())
   const nextDay = () => setDate(dayJs.add(1, 'day').toDate())
 
